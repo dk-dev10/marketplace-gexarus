@@ -2,7 +2,7 @@ const productsWrapper = document.querySelector('.products__wrapper');
 
 const products = [
   {
-    favorite: false,
+    favourite: false,
     title: 'Интернет магазин в телеграм',
     price: 'Бесплатно',
     description:
@@ -52,8 +52,8 @@ const products = [
   },
   {
     favorite: true,
-    title: 'Бот для регистрации',
-    price: '5 000 ₽',
+    title: 'Читы для регистрации в CS:2',
+    price: '13 000 ₽',
     description:
       'Не надо привязывать карту Безлимитное количество подписчиков и заказов',
     images: [
