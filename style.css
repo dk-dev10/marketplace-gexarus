@@ -19,7 +19,6 @@
   background: #f6faff;
 
   min-width: 275px;
-  max-width: 375px;
   /* flex: 1 0 calc(25% - 30px); */
 }
 
@@ -361,4 +360,15 @@
 .checkbox__category--item.active {
   background-color: #3aacff;
   color: #ffffff;
+}
+
+/* PRODUCT WRAPPER */
+.product__slider--wrapper {
+  width: 100%;
+  position: relative;
+  border-radius: 15px;
+  overflow: hidden;
+
+  aspect-ratio: 16 / 9;
+  border: 1px solid #333;
 }

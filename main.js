@@ -81,9 +81,12 @@ function createCategories(categories) {
           item.checked &&
           categoriesId.push(+item.dataset.category)
       );
-      fetchProducts({
-        categories: JSON.stringify(categoriesId),
-      });
+      fetchProducts(
+        {
+          categories: JSON.stringify(categoriesId),
+        },
+        productsWrapper
+      );
     }
 
     categoryCheckboxes.forEach((cb) => {
@@ -104,12 +107,13 @@ function createCategories(categories) {
 }
 
 const productsWrapper = document.querySelector('.products__wrapper');
+const productsWrapperFavourites = document.querySelector(
+  '.products__wrapper--favourites'
+);
+fetchProducts({}, productsWrapper);
+fetchProductsFavourites(productsWrapperFavourites);
 
-document.addEventListener('DOMContentLoaded', () => {
-  fetchProducts();
-});
-
-function fetchProducts(filters = {}) {
+function fetchProducts(filters = {}, wrap) {
   fetch(`${api}/api/AppStore/items`, {
     method: 'POST',
     headers: {
@@ -119,13 +123,21 @@ function fetchProducts(filters = {}) {
   })
     .then((response) => response.json())
     .then((data) => {
-      productsWrapper.innerHTML = '';
-      data.data.forEach((product) => createProduct(product));
+      wrap.innerHTML = '';
+      data.data.forEach((product) => createProduct(product, wrap));
     })
     .catch((error) => console.error('Error:', error));
 }
 
-function createProduct(product) {
+function fetchProductsFavourites(wrap) {
+  if (wrap) fetchProducts({ favourites: 1 }, wrap);
+}
+
+function createProduct(product, wrap) {
+  if (product.length) {
+    return;
+  }
+
   const productCard = document.createElement('div');
   productCard.classList.add('card');
 
@@ -340,10 +352,10 @@ function createProduct(product) {
 
   createSliderCardHeader(product.files);
   productCard.appendChild(productCardHeader);
-  productsWrapper.appendChild(productCard);
   productCard.appendChild(productCardSilderDots);
   productCardContent.appendChild(productCardAuthor);
   productCardContent.appendChild(productCardDetails);
   productCardContent.appendChild(productContentFooter);
   productCard.appendChild(productCardContent);
+  wrap.appendChild(productCard);
 }
