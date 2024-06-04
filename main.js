@@ -1,72 +1,129 @@
+const api = 'https://gexarus.com/';
+
+const productCategories = document.querySelector('.product__categories');
+
+fetch(`${api}api/AppStore/categories`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({}),
+})
+  .then((response) => response.json())
+  .then((data) => createCategories(data.data))
+  .catch((error) => console.error('Error:', error));
+
+function createCategories(categories) {
+  const labelAll = document.createElement('label');
+  const checkboxAll = document.createElement('input');
+  checkboxAll.type = 'checkbox';
+  labelAll.className = 'checkbox__category--item';
+  checkboxAll.dataset.category = 'all';
+  checkboxAll.checked = false;
+
+  if (checkboxAll.checked) {
+    labelAll.className = 'checkbox__category--item active';
+  }
+
+  labelAll.appendChild(checkboxAll);
+  labelAll.appendChild(document.createTextNode('Все'));
+
+  productCategories.appendChild(labelAll);
+
+  categories.forEach((category) => {
+    const label = document.createElement('label');
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    label.className = 'checkbox__category--item';
+    checkbox.dataset.category = category.id;
+    checkbox.checked = false;
+
+    label.appendChild(checkbox);
+    label.appendChild(document.createTextNode(category.name));
+
+    productCategories.appendChild(label);
+  });
+
+  addEventListeners();
+
+  function addEventListeners() {
+    const categoryCheckboxes = document.querySelectorAll(
+      '.checkbox__category--item input'
+    );
+
+    categoryCheckboxes[0].checked = true;
+
+    function checkedClass() {
+      categoryCheckboxes.forEach((cb) => {
+        cb.parentElement.classList.remove('active');
+        if (cb.checked) cb.parentElement.classList.add('active');
+      });
+    }
+
+    checkedClass();
+
+    function checkedCategory() {
+      if (
+        !Array.from(categoryCheckboxes).some((cb) => {
+          return cb.checked;
+        })
+      ) {
+        categoryCheckboxes[0].checked = true;
+        checkedClass();
+      }
+    }
+
+    function fetchCheckedProducts() {
+      const categoriesId = [];
+      categoryCheckboxes.forEach(
+        (item) =>
+          item.dataset.category !== 'all' &&
+          item.checked &&
+          categoriesId.push(+item.dataset.category)
+      );
+      fetchProducts({
+        categories: JSON.stringify(categoriesId),
+      });
+    }
+
+    categoryCheckboxes.forEach((cb) => {
+      cb.addEventListener('change', () => {
+        if (cb.dataset.category === 'all') {
+          categoryCheckboxes.forEach((item) => (item.checked = false));
+          cb.checked = true;
+          checkedClass();
+        } else {
+          categoryCheckboxes[0].checked = false;
+          checkedClass();
+        }
+        checkedCategory();
+        fetchCheckedProducts();
+      });
+    });
+  }
+}
+
 const productsWrapper = document.querySelector('.products__wrapper');
 
-const products = [
-  {
-    favourite: false,
-    title: 'Интернет магазин в телеграм',
-    price: 'Бесплатно',
-    description:
-      'При помощи этого бота ты можешь принимать сообщения на номера, тем самым регистрироваться на разных сайтах и соц.сетях тем самым регистрироваться на разных сайтах и соц.сетях',
-    images: [
-      'https://s3-alpha-sig.figma.com/img/13f3/b989/f9d7d718dc5096e1d7cd9db46301776e?Expires=1718582400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=nP1jc7HWaSuNakLcbvSW-PmyT8RdNJijjtK9kxANJHUhrFTHKIO5X81cjf1FFBXYTiazEXi2kHFzIOP94uwMGdl5HlZY9cROuZbUHzytRCZt36jWdHL7FT4u4iQu75M4HfHCO3nu6v7Aee4vhsDyD72SztDg6RF8oC-oKijKCz0k-74keKVK~107U~k7fmjhJ-YlyenfB72XMdF5jqD4GsXAznyrhhsSP8BWaeraKzmXV16Ebxx7SfVPBHjv31DmOpcofjUhrtn6j6TFoEA2RN5nGuiidsAN7Ahe3m3hzhNGzOudtJ-KsyGrl-JRGtMUJd7-KR~PYYBuIrb3oV8IOQ__',
-      'https://s3-alpha-sig.figma.com/img/5983/ec90/c6c2a5c760ef4790e2e8e2146485d690?Expires=1718582400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=T074TH5RYS5Iavtx-B9gJpnh~~k5DEDZAVZpcf57T0KdebAh7buxR20mUAqacpFE4dPwLAY7bJZL2eVvCaTNOFuZ-s4GZ6htoDHppp5mwJeUXwwe~vHq~sKNRwZvuQuckXaAX3GbK1nHcrxYHOcqJO54sgani2efdU1KuJucjcUWnsS8OatJFdt~PPLQmIXIyuZz4rEJsrSaPnksYZ~0vTTyhA2pgQyttVPteJjqNyNhiA~wznPeYHuiNcEr~MRmW9fh4cjnTs8wC7bY1TRy7m-7AoYul3gr7c7pfjWzMwh0BbCxRxZ6h9op1VRyhRYw1Rd6FTCr-a-YuwVcv7dpZQ__',
-      'https://s3-alpha-sig.figma.com/img/00be/a5b3/075d057624712156629b3bf0bcf29b1b?Expires=1718582400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=SmXaIU-vKnv~mLrlpCv8sHcwU13J8WtlrJiKR0cFl5ERHNl-Qr08ZCU6pTq9GhfewMRV~xCkYjnYf10YPpxx4dmcmXim~gRTmYbiXJ5EW2N6cTFVDy6qyptrEKsDngW1~v6vpT00~izsyV7TkO4U7-TdWgVpyrNZmtgrD8N2Otn9~t24qbYNT9Q6Jxu7RN4lWwOtEWxegzQICGM4GZx278GMX4Fxt5wE~iW-FSwVsIboInWQ-fVobd5823SCCfEtsyk6EdpN96jzIoRS2jBgJf3178d2G~GSGdhvFn4cfdXuw9p2yIbkTXmK9~uxJZtaYpEj8dNlYGagP81T1jIg4g__',
-    ],
-    installers: [
-      {
-        type: 'img',
-        img: 'https://sm.ign.com/ign_nordic/cover/a/avatar-gen/avatar-generations_prsz.jpg',
-      },
-      {
-        type: 'img',
-        img: 'https://sm.ign.com/ign_nordic/cover/a/avatar-gen/avatar-generations_prsz.jpg',
-      },
-      {
-        type: 'text',
-        text: '+3',
-      },
-    ],
-    author: {
-      avatar:
-        'https://sm.ign.com/ign_nordic/cover/a/avatar-gen/avatar-generations_prsz.jpg',
-      name: 'Александр',
+document.addEventListener('DOMContentLoaded', () => {
+  fetchProducts();
+});
+
+function fetchProducts(filters = {}) {
+  fetch(`${api}/api/AppStore/items`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
-  },
-  {
-    favorite: true,
-    title: 'Бот для регистрации',
-    price: '5 000 ₽',
-    description:
-      'Не надо привязывать карту Безлимитное количество подписчиков и заказов',
-    images: [
-      'https://s3-alpha-sig.figma.com/img/13f3/b989/f9d7d718dc5096e1d7cd9db46301776e?Expires=1718582400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=nP1jc7HWaSuNakLcbvSW-PmyT8RdNJijjtK9kxANJHUhrFTHKIO5X81cjf1FFBXYTiazEXi2kHFzIOP94uwMGdl5HlZY9cROuZbUHzytRCZt36jWdHL7FT4u4iQu75M4HfHCO3nu6v7Aee4vhsDyD72SztDg6RF8oC-oKijKCz0k-74keKVK~107U~k7fmjhJ-YlyenfB72XMdF5jqD4GsXAznyrhhsSP8BWaeraKzmXV16Ebxx7SfVPBHjv31DmOpcofjUhrtn6j6TFoEA2RN5nGuiidsAN7Ahe3m3hzhNGzOudtJ-KsyGrl-JRGtMUJd7-KR~PYYBuIrb3oV8IOQ__',
-      'https://s3-alpha-sig.figma.com/img/5983/ec90/c6c2a5c760ef4790e2e8e2146485d690?Expires=1718582400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=T074TH5RYS5Iavtx-B9gJpnh~~k5DEDZAVZpcf57T0KdebAh7buxR20mUAqacpFE4dPwLAY7bJZL2eVvCaTNOFuZ-s4GZ6htoDHppp5mwJeUXwwe~vHq~sKNRwZvuQuckXaAX3GbK1nHcrxYHOcqJO54sgani2efdU1KuJucjcUWnsS8OatJFdt~PPLQmIXIyuZz4rEJsrSaPnksYZ~0vTTyhA2pgQyttVPteJjqNyNhiA~wznPeYHuiNcEr~MRmW9fh4cjnTs8wC7bY1TRy7m-7AoYul3gr7c7pfjWzMwh0BbCxRxZ6h9op1VRyhRYw1Rd6FTCr-a-YuwVcv7dpZQ__',
-      'https://s3-alpha-sig.figma.com/img/00be/a5b3/075d057624712156629b3bf0bcf29b1b?Expires=1718582400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=SmXaIU-vKnv~mLrlpCv8sHcwU13J8WtlrJiKR0cFl5ERHNl-Qr08ZCU6pTq9GhfewMRV~xCkYjnYf10YPpxx4dmcmXim~gRTmYbiXJ5EW2N6cTFVDy6qyptrEKsDngW1~v6vpT00~izsyV7TkO4U7-TdWgVpyrNZmtgrD8N2Otn9~t24qbYNT9Q6Jxu7RN4lWwOtEWxegzQICGM4GZx278GMX4Fxt5wE~iW-FSwVsIboInWQ-fVobd5823SCCfEtsyk6EdpN96jzIoRS2jBgJf3178d2G~GSGdhvFn4cfdXuw9p2yIbkTXmK9~uxJZtaYpEj8dNlYGagP81T1jIg4g__',
-    ],
-    installers: [],
-    author: {
-      avatar:
-        'https://sm.ign.com/ign_nordic/cover/a/avatar-gen/avatar-generations_prsz.jpg',
-      name: 'Иван Иванов',
-    },
-  },
-  {
-    favorite: true,
-    title: 'Читы для регистрации в CS:2',
-    price: '13 000 ₽',
-    description:
-      'Не надо привязывать карту Безлимитное количество подписчиков и заказов',
-    images: [
-      'https://s3-alpha-sig.figma.com/img/6455/32a6/74ce733548f843dd1f278ad9145c4d91?Expires=1718582400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=pJvZqs50yiSlX6EFKYJXs4lCj2lExbCQh-bwyPIIt5Kju4ep0XMLYi3szyMyTFyGi10-lH-MpuFt6l9chQ7VSQZP4LNoW0db0o4jKIxhT22MAQe~bXzQhCS4I41PdXCF6R2EqvmzSdSbiUD~IxqCYolpZgNU5gjvhOFK17i7IHwM4qnQMyV7htxZln0XQQWc8puwIY1dJSVVBOubbC3DZuxHDbL38-IT0yTnGP0~Ylq-dLcYDECXPR6X1vkLTDl2~6adf~hRL6-o0F9JZFhSwYq5qpmM1TYghD70d344pVHoreazdZ~b9MB2Vkj4PoKtRDnXIdlezP09T4kkaXxHjg__',
-    ],
-    installers: [],
-    author: {
-      avatar:
-        'https://sm.ign.com/ign_nordic/cover/a/avatar-gen/avatar-generations_prsz.jpg',
-      name: 'Иван Иванов',
-    },
-  },
-];
+    body: JSON.stringify(filters),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      productsWrapper.innerHTML = '';
+      data.data.forEach((product) => createProduct(product));
+    })
+    .catch((error) => console.error('Error:', error));
+}
 
 function createProduct(product) {
   const productCard = document.createElement('div');
@@ -88,7 +145,7 @@ function createProduct(product) {
   const productCardAuthotAvatar = document.createElement('div');
   productCardAuthotAvatar.classList.add('product__author__avatar');
   const productCardAuthorAvatarImg = document.createElement('img');
-  productCardAuthorAvatarImg.src = product.author.avatar;
+  productCardAuthorAvatarImg.src = api + product.author.avatar;
   const productCardAuthorName = document.createElement('p');
   productCardAuthorName.textContent = product.author.name;
   productCardAuthorName.classList.add('product__author__name');
@@ -188,7 +245,23 @@ function createProduct(product) {
   productCardLabel.classList.add('card__favorite__checkbox');
   const productCardLabelInput = document.createElement('input');
   productCardLabelInput.type = 'checkbox';
-  productCardLabelInput.checked = product.favorite;
+  productCardLabelInput.checked = product.favourite;
+
+  productCardLabelInput.onclick = () => {
+    fetch(`${api}/api/AppStore/favourites/action`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: product.id,
+        status: +productCardLabelInput.checked,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.error('Error:', error));
+  };
 
   const productCardLabelSvg = `<svg
   width="20"
@@ -211,16 +284,20 @@ function createProduct(product) {
 
   productCardHeader.appendChild(productCardLabel);
 
-  function createSliderCardHeader(images) {
+  function createSliderCardHeader(files) {
     const productCardHeaderSliderWrapper = document.createElement('div');
     productCardHeaderSliderWrapper.classList.add('card__header--slider');
 
-    images.forEach((src) => {
+    files.forEach((file) => {
       const productCardHeaderSliderImg = document.createElement('div');
       productCardHeaderSliderImg.classList.add('card__header__img');
-
-      const productImg = document.createElement('img');
-      productImg.setAttribute('src', src);
+      let productImg;
+      switch (file.type) {
+        case 'img':
+          productImg = document.createElement('img');
+          productImg.setAttribute('src', file.medium);
+          break;
+      }
 
       productCardHeaderSliderImg.appendChild(productImg);
       productCardHeaderSliderWrapper.appendChild(productCardHeaderSliderImg);
@@ -228,8 +305,8 @@ function createProduct(product) {
 
     productCardHeader.appendChild(productCardHeaderSliderWrapper);
 
-    if (images.length > 1) {
-      createDots(images.length, productCardHeaderSliderWrapper);
+    if (files.length > 1) {
+      createDots(files.length, productCardHeaderSliderWrapper);
     }
   }
 
@@ -261,7 +338,7 @@ function createProduct(product) {
     dots[index].classList.add('active');
   }
 
-  createSliderCardHeader(product.images);
+  createSliderCardHeader(product.files);
   productCard.appendChild(productCardHeader);
   productsWrapper.appendChild(productCard);
   productCard.appendChild(productCardSilderDots);
@@ -270,5 +347,3 @@ function createProduct(product) {
   productCardContent.appendChild(productContentFooter);
   productCard.appendChild(productCardContent);
 }
-
-products.forEach((product) => createProduct(product));
