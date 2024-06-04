@@ -10,7 +10,7 @@
 
 .container {
   width: 94%;
-  margin: 50px auto 0;
+  margin: 50px auto 0 !important;
 }
 
 .card {
@@ -18,17 +18,22 @@
   border: 1px solid #dbf0ff;
   background: #f6faff;
 
-  width: clamp(16.875rem, 30%, 18.75rem);
+  min-width: 275px;
+  max-width: 375px;
+  /* flex: 1 0 calc(25% - 30px); */
 }
 
 .products__wrapper {
-  display: flex;
-  flex-wrap: wrap;
   gap: 30px;
+  /*   row-gap: 20px; */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
+  width: 100%;
 }
 
-@media (max-width: 420px) {
-  .products__wrapper {
+@media (max-width: 600px) {
+  .card {
+    max-width: 100%;
   }
 }
 
@@ -151,12 +156,14 @@
   object-fit: cover;
   height: 100%;
   width: 100%;
+  vertical-align: auto;
 }
 
 .product__author__name {
   font-size: 12px;
   line-height: 14.52px;
   font-weight: 400;
+  margin: 0;
 }
 
 .product__details {
@@ -309,6 +316,7 @@
   margin-bottom: 50px;
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .btn {
@@ -343,6 +351,8 @@
   border-radius: 10px;
   transition: background 0.2s ease;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
 .checkbox__category--item input {
