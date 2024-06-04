@@ -372,3 +372,22 @@
   aspect-ratio: 16 / 9;
   border: 1px solid #333;
 }
+
+.tabs__details-tab {
+  font-size: 18px;
+  line-height: 21.78px;
+  font-weight: 500;
+  padding-bottom: 3px;
+  color: #d9d9d9;
+  transition: color 0.2s ease;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+.tabs__details-tab:hover {
+  color: #5d5d5d;
+}
+
+.tabs__details-tab.active {
+  color: #000;
+  border-bottom: 2px solid #2388ff;
+}
