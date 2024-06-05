@@ -359,3 +359,4 @@ function createProduct(product, wrap) {
   productCard.appendChild(productCardContent);
   wrap.appendChild(productCard);
 }
+ 
