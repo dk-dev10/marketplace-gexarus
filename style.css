@@ -814,7 +814,7 @@
   cursor: pointer;
 }
 
-.modal__review--success {
+.modal__review--success, .modal__review--error  {
   display: flex;
   flex-direction: column;
   text-align: center;

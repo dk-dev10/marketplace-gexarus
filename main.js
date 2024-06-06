@@ -292,6 +292,7 @@ function createProduct(product, wrap) {
 
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = productCardLabelSvg;
+  console.log(tempDiv.firstChild)
   productCardLabel.appendChild(tempDiv.firstChild);
 
   productCardHeader.appendChild(productCardLabel);

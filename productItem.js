@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
     .catch((error) => console.error('Error:', error));
 
   function setProduct(product) {
-    console.log(product);
     const productTitle = document.querySelector('.product__page__title');
     const productPrice = document.querySelector(
       '.product__page__details--price .price'
@@ -42,6 +41,33 @@ document.addEventListener('DOMContentLoaded', () => {
     );
 
     product.rating.list.forEach((msg) => setMessage(msg));
+
+    setMessageRating(product.rating.average).forEach((item, idx) => {
+      const fullSvg = `<svg width="20" height="19" fill="none">
+      <use xlink:href="#iconMessageRatingStar"></use>
+      </svg>`;
+      const full = document.createElement('div');
+      full.innerHTML = fullSvg;
+      const halfSvg = `<svg width="20" height="19" fill="none">
+      <use xlink:href="#iconMessageRatingStarHalf"></use>
+      </svg>`;
+      const half = document.createElement('div');
+      half.innerHTML = halfSvg;
+      const emptySvg = `<svg width="20" height="19" fill="none">
+        <use xlink:href="#iconMessageRatingStarEmpty"></use>
+        </svg>`;
+      const empty = document.createElement('div');
+      empty.innerHTML = emptySvg;
+      const span = document.createElement('span');
+      span.appendChild(
+        item === 1
+          ? full.firstChild
+          : item === 0
+          ? half.firstChild
+          : empty.firstChild
+      );
+      reviewCardStarRating.appendChild(span);
+    });
 
     productTitle.textContent = product.title;
     productPrice.textContent = product.price;

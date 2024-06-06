@@ -7,6 +7,7 @@ const modalReviewForm = document.querySelector('#modalReviewForm');
 const openReviewRatingModal = document.querySelector('#openReviewRatingModal');
 const reviewModal = document.querySelector('.modal__review');
 const successModal = document.querySelector('.modal__review--success');
+const errorModal = document.querySelector('.modal__review--error');
 const reviewMModalRating = document.querySelectorAll(
   'input[name="reviewStars"]'
 );
@@ -22,6 +23,7 @@ close.addEventListener('click', closeRatingModal);
 function closeRatingModal() {
   overlay.classList.add('close');
   successModal.classList.add('dnone');
+  errorModal.classList.add('dnone');
   reviewModal.classList.remove('dnone');
   resetRatingModal();
 }
@@ -47,6 +49,8 @@ reviewMModalRating.forEach((star) => {
   });
 });
 
+const api = 'https://gexarus.com';
+
 modalReviewForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
@@ -57,8 +61,32 @@ modalReviewForm.addEventListener('submit', (e) => {
   reviewSendBtn.innerHTML = '<div class="pie"></div>';
   reviewSendBtn.disabled = true;
 
-  setTimeout(() => {
-    reviewModal.classList.add('dnone');
-    successModal.classList.remove('dnone');
-  }, 1500);
+  fetch(`${api}/api/AppStore/reviewsSend`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      app_id: 14,
+      rating: formData.get('reviewStars'),
+      comment: formData.get('modalReviewTextarea'),
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        reviewModal.classList.add('dnone');
+        successModal.classList.remove('dnone');
+        setTimeout(() => {
+          closeRatingModal();
+        }, 3000);
+      } else {
+        reviewModal.classList.add('dnone');
+        errorModal.classList.remove('dnone');
+        errorModal.querySelector('.modal__review--success__text').textContent =
+          data.err;
+        console.error('Error:', data);
+      }
+    })
+    .catch((error) => console.log('Error:', error));
 });
