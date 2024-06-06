@@ -586,22 +586,8 @@
 
 .progress__bar-fill {
   background: #2388ff;
-  width: 63%;
-}
-.progressbar:nth-child(2) .progress__bar-fill {
-  width: 24%;
-}
-
-.progressbar:nth-child(3) .progress__bar-fill {
-  width: 9%;
-}
-
-.progressbar:nth-child(4) .progress__bar-fill {
-  width: 1%;
-}
-
-.progressbar:nth-child(5) .progress__bar-fill {
-  width: 7%;
+  width: 0%;
+  transition: width 0.2s ease;
 }
 
 .review__messages {
@@ -615,6 +601,9 @@
 
   max-width: 750px;
   width: 100%;
+}
+
+.review__message:last-child {
   margin-bottom: 25px;
 }
 
@@ -648,6 +637,7 @@
 .message__author span {
   font-weight: 400;
   color: #5c6c72;
+  margin-left: 8px;
 }
 
 .author__review--stars {
@@ -882,11 +872,14 @@ button:disabled {
 .product__page--info-wrapper {
   display: flex;
   width: 100%;
-  gap: 50px;
+  gap: 30px;
 }
 
 .product__page--info-wrapper .product__slider--wrapper {
   max-width: 100%;
+}
+.product__page--info-lf .product__page__title {
+  width: 80%;
 }
 
 .product__page--info-lf {
@@ -901,7 +894,10 @@ button:disabled {
 
 .product__page--info-rt {
   padding-top: 45px;
+  display: flex;
+  flex-direction: column;
 }
+
 .product__page--info-rt .product__page__details--btn {
   margin-top: auto;
   margin-bottom: 30px;
