@@ -4,8 +4,12 @@ const close = document.querySelector('#close');
 
 const reviewSendBtn = document.querySelector('.modal__review--send');
 const modalReviewForm = document.querySelector('#modalReviewForm');
+const openReviewRatingModal = document.querySelector('#openReviewRatingModal');
 const reviewModal = document.querySelector('.modal__review');
 const successModal = document.querySelector('.modal__review--success');
+const reviewMModalRating = document.querySelectorAll(
+  'input[name="reviewStars"]'
+);
 
 // overlay.addEventListener('click', (e) => {
 //   if (e.target === overlay) {
@@ -13,26 +17,42 @@ const successModal = document.querySelector('.modal__review--success');
 //   }
 // });
 
-close.addEventListener('click', (e) => {
+close.addEventListener('click', closeRatingModal);
+
+function closeRatingModal() {
   overlay.classList.add('close');
-});
+  successModal.classList.add('dnone');
+  reviewModal.classList.remove('dnone');
+  resetRatingModal();
+}
 
-open.addEventListener('click', (e) => {
-  overlay.classList.remove('close');
-});
+function resetRatingModal() {
+  modalReviewForm.reset();
+  reviewSendBtn.textContent = 'Отправить';
+  reviewSendBtn.disabled = true;
+}
 
-// reviewSendBtn.addEventListener('click', (e) => {
-//   console.log(
-//     document.querySelector('input[name="reviewStars"]:checked').value
-//   );
+// open.addEventListener('click', () => {
+//   overlay.classList.remove('close');
 // });
+
+openReviewRatingModal.addEventListener('click', (e) => {
+  const modalName = e.target.getAttribute('data-buttonmodalname');
+  document.querySelector(`[data-${modalName}]`).classList.remove('close');
+});
+
+reviewMModalRating.forEach((star) => {
+  star.addEventListener('click', () => {
+    reviewSendBtn.disabled = false;
+  });
+});
 
 modalReviewForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
-  // const formData = new FormData(modalReviewForm);
-  // const selectedValue = formData.get('reviewStars');
-  // const selectedText = formData.get('modalReviewTextarea');
+  const formData = new FormData(modalReviewForm);
+
+  console.log(formData);
 
   reviewSendBtn.innerHTML = '<div class="pie"></div>';
   reviewSendBtn.disabled = true;
