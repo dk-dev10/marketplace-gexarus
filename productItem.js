@@ -1,3 +1,5 @@
+let productData = {};
+
 document.addEventListener('DOMContentLoaded', () => {
   const api = 'https://gexarus.com';
 
@@ -11,7 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }),
   })
     .then((response) => response.json())
-    .then((data) => setProduct(data.data))
+    .then((data) => {
+      productData = data.data;
+      setProduct(data.data);
+    })
     .catch((error) => console.error('Error:', error));
 
   function setProduct(product) {
@@ -40,34 +45,12 @@ document.addEventListener('DOMContentLoaded', () => {
       '.review__card .star__rating'
     );
 
-    product.rating.list.forEach((msg) => setMessage(msg));
+    product.rating.list.forEach((msg) =>
+      setMessage(msg, reviewMessage, product.rating.average)
+    );
 
-    setMessageRating(product.rating.average).forEach((item, idx) => {
-      const fullSvg = `<svg width="20" height="19" fill="none">
-      <use xlink:href="#iconMessageRatingStar"></use>
-      </svg>`;
-      const full = document.createElement('div');
-      full.innerHTML = fullSvg;
-      const halfSvg = `<svg width="20" height="19" fill="none">
-      <use xlink:href="#iconMessageRatingStarHalf"></use>
-      </svg>`;
-      const half = document.createElement('div');
-      half.innerHTML = halfSvg;
-      const emptySvg = `<svg width="20" height="19" fill="none">
-        <use xlink:href="#iconMessageRatingStarEmpty"></use>
-        </svg>`;
-      const empty = document.createElement('div');
-      empty.innerHTML = emptySvg;
-      const span = document.createElement('span');
-      span.appendChild(
-        item === 1
-          ? full.firstChild
-          : item === 0
-          ? half.firstChild
-          : empty.firstChild
-      );
-      reviewCardStarRating.appendChild(span);
-    });
+    const resultArr = setMessageRating(product.rating.average);
+    setMessageAvrageRating(resultArr, reviewCardStarRating);
 
     productTitle.textContent = product.title;
     productPrice.textContent = product.price;
@@ -102,63 +85,93 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     ratingCount.textContent = `(${product.rating.list.length})`;
-
-    function setMessage(message) {
-      const messageDiv = document.createElement('div');
-      messageDiv.classList.add('review__message');
-      const messageHeaderDiv = document.createElement('div');
-      messageHeaderDiv.classList.add('message__header');
-      const messageHeaderAvatarDiv = document.createElement('div');
-      messageHeaderAvatarDiv.classList.add('message__avatar');
-      const messageHeaderAvatarImg = document.createElement('img');
-      messageHeaderAvatarImg.setAttribute('src', api + message.user_photo);
-      messageHeaderAvatarDiv.appendChild(messageHeaderAvatarImg);
-      const messageHeaderDetailsDiv = document.createElement('div');
-      messageHeaderDetailsDiv.classList.add('message__header--details');
-      const messageAuthorH3 = document.createElement('h3');
-      messageAuthorH3.classList.add('message__author');
-      const authorName = document.createTextNode(message.user_name);
-      const messageAuthorDateSpan = document.createElement('span');
-      messageAuthorDateSpan.textContent = formatDate(message.review_date);
-      messageAuthorH3.appendChild(authorName);
-      messageAuthorH3.appendChild(messageAuthorDateSpan);
-      const messageAuthorReviewStarsDiv = document.createElement('div');
-      messageAuthorReviewStarsDiv.classList.add('author__review--stars');
-
-      const messageText = document.createElement('p');
-      messageText.classList.add('message__text');
-      messageText.textContent = message.review_comment;
-
-      setMessageRating(product.rating.average).forEach((star) => {
-        const messageRatingSpan = document.createElement('span');
-        messageRatingSpan.classList.add('progressbar__star');
-        const messageStarEmpty = `<svg width="15" height="15" fill="none">
-        <use xlink:href="#iconSmallEmptyStar"></use>
-      </svg>`;
-        const messageStar = `<svg width="15" height="15" fill="none">
-        <use xlink:href="#iconSmallFillStar"></use>
-      </svg>`;
-
-        if (star === 1) {
-          messageRatingSpan.innerHTML = messageStar;
-        } else {
-          messageRatingSpan.innerHTML = messageStarEmpty;
-        }
-
-        messageAuthorReviewStarsDiv.appendChild(messageRatingSpan);
-      });
-
-      messageHeaderDetailsDiv.appendChild(messageAuthorH3);
-      messageHeaderDetailsDiv.appendChild(messageAuthorReviewStarsDiv);
-      messageHeaderAvatarDiv.appendChild(messageHeaderAvatarImg);
-      messageHeaderDiv.appendChild(messageHeaderAvatarDiv);
-      messageHeaderDiv.appendChild(messageHeaderDetailsDiv);
-      messageDiv.appendChild(messageHeaderDiv);
-      messageDiv.appendChild(messageText);
-      reviewMessage.appendChild(messageDiv);
-    }
   }
 });
+
+function setMessageAvrageRating(arr, wrapper) {
+  wrapper.innerHTML = '';
+  arr.forEach((item) => {
+    const fullSvg = `<svg width="20" height="19" fill="none">
+    <use xlink:href="#iconMessageRatingStar"></use>
+    </svg>`;
+    const full = document.createElement('div');
+    full.innerHTML = fullSvg;
+    const halfSvg = `<svg width="20" height="19" fill="none">
+    <use xlink:href="#iconMessageRatingStarHalf"></use>
+    </svg>`;
+    const half = document.createElement('div');
+    half.innerHTML = halfSvg;
+    const emptySvg = `<svg width="20" height="19" fill="none">
+      <use xlink:href="#iconMessageRatingStarEmpty"></use>
+      </svg>`;
+    const empty = document.createElement('div');
+    empty.innerHTML = emptySvg;
+    const span = document.createElement('span');
+    span.appendChild(
+      item === 1
+        ? full.firstChild
+        : item === 0
+        ? half.firstChild
+        : empty.firstChild
+    );
+    wrapper.appendChild(span);
+  });
+}
+
+function setMessage(message, reviewMessage) {
+  const messageDiv = document.createElement('div');
+  messageDiv.classList.add('review__message');
+  const messageHeaderDiv = document.createElement('div');
+  messageHeaderDiv.classList.add('message__header');
+  const messageHeaderAvatarDiv = document.createElement('div');
+  messageHeaderAvatarDiv.classList.add('message__avatar');
+  const messageHeaderAvatarImg = document.createElement('img');
+  messageHeaderAvatarImg.setAttribute('src', api + message.user_photo);
+  messageHeaderAvatarDiv.appendChild(messageHeaderAvatarImg);
+  const messageHeaderDetailsDiv = document.createElement('div');
+  messageHeaderDetailsDiv.classList.add('message__header--details');
+  const messageAuthorH3 = document.createElement('h3');
+  messageAuthorH3.classList.add('message__author');
+  const authorName = document.createTextNode(message.user_name);
+  const messageAuthorDateSpan = document.createElement('span');
+  messageAuthorDateSpan.textContent = formatDate(message.review_date);
+  messageAuthorH3.appendChild(authorName);
+  messageAuthorH3.appendChild(messageAuthorDateSpan);
+  const messageAuthorReviewStarsDiv = document.createElement('div');
+  messageAuthorReviewStarsDiv.classList.add('author__review--stars');
+
+  const messageText = document.createElement('p');
+  messageText.classList.add('message__text');
+  messageText.textContent = message.review_comment;
+
+  setMessageRating(message.review_rating).forEach((star) => {
+    const messageRatingSpan = document.createElement('span');
+    messageRatingSpan.classList.add('progressbar__star');
+    const messageStarEmpty = `<svg width="15" height="15" fill="none">
+    <use xlink:href="#iconSmallEmptyStar"></use>
+  </svg>`;
+    const messageStar = `<svg width="15" height="15" fill="none">
+    <use xlink:href="#iconSmallFillStar"></use>
+  </svg>`;
+
+    if (star === 1) {
+      messageRatingSpan.innerHTML = messageStar;
+    } else {
+      messageRatingSpan.innerHTML = messageStarEmpty;
+    }
+
+    messageAuthorReviewStarsDiv.appendChild(messageRatingSpan);
+  });
+
+  messageHeaderDetailsDiv.appendChild(messageAuthorH3);
+  messageHeaderDetailsDiv.appendChild(messageAuthorReviewStarsDiv);
+  messageHeaderAvatarDiv.appendChild(messageHeaderAvatarImg);
+  messageHeaderDiv.appendChild(messageHeaderAvatarDiv);
+  messageHeaderDiv.appendChild(messageHeaderDetailsDiv);
+  messageDiv.appendChild(messageHeaderDiv);
+  messageDiv.appendChild(messageText);
+  reviewMessage.appendChild(messageDiv);
+}
 
 function setMessageRating(rating) {
   const arr = [0, 0, 0, 0, 0];
