@@ -292,7 +292,6 @@ function createProduct(product, wrap) {
 
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = productCardLabelSvg;
-  console.log(tempDiv.firstChild)
   productCardLabel.appendChild(tempDiv.firstChild);
 
   productCardHeader.appendChild(productCardLabel);
@@ -305,14 +304,21 @@ function createProduct(product, wrap) {
       const productCardHeaderSliderImg = document.createElement('div');
       productCardHeaderSliderImg.classList.add('card__header__img');
       let productImg;
+      let productVideo;
       switch (file.type) {
         case 'img':
           productImg = document.createElement('img');
           productImg.setAttribute('src', file.medium);
           break;
+
+        case 'video':
+          productVideo = document.createElement('video');
+          productVideo.setAttribute('src', file.url);
+          console.log(productVideo)
       }
 
       productCardHeaderSliderImg.appendChild(productImg);
+      if (productVideo) productCardHeaderSliderImg.appendChild(productVideo);
       productCardHeaderSliderWrapper.appendChild(productCardHeaderSliderImg);
     });
 
@@ -360,4 +366,3 @@ function createProduct(product, wrap) {
   productCard.appendChild(productCardContent);
   wrap.appendChild(productCard);
 }
- 
