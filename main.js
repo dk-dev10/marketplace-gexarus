@@ -1,5 +1,3 @@
-
-
 const productCategories = document.querySelector('.product__categories');
 
 // fetchCategories().then((category) => createCategories(category));
@@ -101,7 +99,6 @@ const productsWrapperFavourites = document.querySelector(
   '.products__wrapper--favourites'
 );
 
-
 setProductsInWrapper({});
 
 function createProduct(product, wrap) {
@@ -109,8 +106,9 @@ function createProduct(product, wrap) {
     return;
   }
 
-  const productCard = document.createElement('div');
+  const productCard = document.createElement('a');
   productCard.classList.add('card');
+  productCard.setAttribute('href', '?id=' + product.id);
 
   const productCardHeader = document.createElement('div');
   productCardHeader.classList.add('card__header');
@@ -192,6 +190,11 @@ function createProduct(product, wrap) {
 
   const productContentFooterBtn = document.createElement('button');
   productContentFooterBtn.classList.add('card__content--btn');
+
+  productContentFooterBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+  });
+
   const productContentFooterBtnSvg = `<svg
   width="20"
   height="18"
@@ -242,7 +245,6 @@ function createProduct(product, wrap) {
       }),
     })
       .then((response) => response.json())
-      .then((data) => console.log(data))
       .catch((error) => console.error('Error:', error));
   };
 

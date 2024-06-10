@@ -5,7 +5,6 @@ const toggleFavourite = document.querySelector(
 );
 
 toggleFavourite.addEventListener('click', (e) => {
-  console.log(productData);
   const res = e.target.checked ? 1 : 0;
   fetch(`${api}/api/AppStore/favourites/action`, {
     method: 'POST',
@@ -25,13 +24,18 @@ toggleFavourite.addEventListener('click', (e) => {
 document.addEventListener('DOMContentLoaded', () => {
   const api = 'https://gexarus.com';
 
+  const url = new URL(window.location.href);
+  const id = url.searchParams.get('id');
+
+  console.log(id);
+
   fetch(`${api}/api/AppStore/item`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      id: 14,
+      id,
     }),
   })
     .then((response) => response.json())

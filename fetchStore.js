@@ -1,4 +1,4 @@
-fetchCategoriesFavourite().then((category) => createCategories(category));
+fetchCategories().then((category) => createCategories(category));
 
 function setProductsInWrapper({ params = {}, wrapper = productsWrapper }) {
   wrapper.innerHTML = '';

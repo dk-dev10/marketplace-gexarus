@@ -18,9 +18,14 @@
   border: 1px solid #dbf0ff;
   background: #f6faff;
 
+  text-decoration: none;
   min-width: 275px;
   max-width: 350px;
   /* flex: 1 0 calc(25% - 30px); */
+}
+
+.card > * {
+  color: initial;
 }
 
 .products__wrapper {
@@ -231,6 +236,7 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  z-index: 9;
 }
 
 .card__content--footer {
