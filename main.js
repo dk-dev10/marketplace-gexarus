@@ -1,17 +1,8 @@
-const api = 'https://gexarus.com/';
+
 
 const productCategories = document.querySelector('.product__categories');
 
-fetch(`${api}api/AppStore/categories`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({}),
-})
-  .then((response) => response.json())
-  .then((data) => createCategories(data.data))
-  .catch((error) => console.error('Error:', error));
+// fetchCategories().then((category) => createCategories(category));
 
 function createCategories(categories) {
   const labelAll = document.createElement('label');
@@ -81,12 +72,11 @@ function createCategories(categories) {
           item.checked &&
           categoriesId.push(+item.dataset.category)
       );
-      fetchProducts(
-        {
+      setProductsInWrapper({
+        params: {
           categories: JSON.stringify(categoriesId),
         },
-        productsWrapper
-      );
+      });
     }
 
     categoryCheckboxes.forEach((cb) => {
@@ -110,28 +100,9 @@ const productsWrapper = document.querySelector('.products__wrapper');
 const productsWrapperFavourites = document.querySelector(
   '.products__wrapper--favourites'
 );
-fetchProducts({}, productsWrapper);
-fetchProductsFavourites(productsWrapperFavourites);
 
-function fetchProducts(filters = {}, wrap) {
-  fetch(`${api}/api/AppStore/items`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(filters),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      wrap.innerHTML = '';
-      data.data.forEach((product) => createProduct(product, wrap));
-    })
-    .catch((error) => console.error('Error:', error));
-}
 
-function fetchProductsFavourites(wrap) {
-  if (wrap) fetchProducts({ favourites: 1 }, wrap);
-}
+setProductsInWrapper({});
 
 function createProduct(product, wrap) {
   if (product.length) {
@@ -296,68 +267,7 @@ function createProduct(product, wrap) {
 
   productCardHeader.appendChild(productCardLabel);
 
-  function createSliderCardHeader(files) {
-    const productCardHeaderSliderWrapper = document.createElement('div');
-    productCardHeaderSliderWrapper.classList.add('card__header--slider');
-
-    files.forEach((file) => {
-      const productCardHeaderSliderImg = document.createElement('div');
-      productCardHeaderSliderImg.classList.add('card__header__img');
-      let productImg;
-      let productVideo;
-      switch (file.type) {
-        case 'img':
-          productImg = document.createElement('img');
-          productImg.setAttribute('src', file.medium);
-          break;
-
-        case 'video':
-          productVideo = document.createElement('video');
-          productVideo.setAttribute('src', file.url);
-          console.log(productVideo)
-      }
-
-      productCardHeaderSliderImg.appendChild(productImg);
-      if (productVideo) productCardHeaderSliderImg.appendChild(productVideo);
-      productCardHeaderSliderWrapper.appendChild(productCardHeaderSliderImg);
-    });
-
-    productCardHeader.appendChild(productCardHeaderSliderWrapper);
-
-    if (files.length > 1) {
-      createDots(files.length, productCardHeaderSliderWrapper);
-    }
-  }
-
-  function createDots(count, slider) {
-    const dots = [];
-
-    for (let i = 0; i < count; i++) {
-      const dot = document.createElement('button');
-      dot.className = 'dot';
-      dot.dataset.slide = i;
-      dot.addEventListener('click', () => {
-        slider.scrollLeft = i * slider.clientWidth;
-        updateActiveDot(i, dots);
-      });
-      dots.push(dot);
-      productCardSilderDots.appendChild(dot);
-    }
-
-    slider.addEventListener('scroll', () => {
-      const activeIndex = Math.round(slider.scrollLeft / slider.clientWidth);
-      updateActiveDot(activeIndex, dots);
-    });
-
-    updateActiveDot(0, dots);
-  }
-
-  function updateActiveDot(index, dots) {
-    dots.forEach((dot) => dot.classList.remove('active'));
-    dots[index].classList.add('active');
-  }
-
-  createSliderCardHeader(product.files);
+  CreateSliderWrapper(product.files, productCardHeader, productCardSilderDots);
   productCard.appendChild(productCardHeader);
   productCard.appendChild(productCardSilderDots);
   productCardContent.appendChild(productCardAuthor);

@@ -1,4 +1,4 @@
-const overlay = document.querySelector('.overlay');
+const overlay = document.querySelectorAll('.overlay');
 const open = document.querySelector('#open');
 const close = document.querySelector('#close');
 
@@ -11,9 +11,19 @@ const errorModal = document.querySelector('.modal__review--error');
 const reviewMModalRating = document.querySelectorAll(
   'input[name="reviewStars"]'
 );
-const installBtn = document.querySelector(
-  '[data-buttonmodalname="installmodal"]'
-);
+const formInstall = document.querySelector('.modal__review--form');
+
+const formInput = formInstall.querySelector('input');
+
+document.addEventListener('DOMContentLoaded', () => {
+  const checkDataInterval = setInterval(() => {
+    if (Object.keys(productData).length !== 0) {
+      clearInterval(checkDataInterval);
+      formInput.value = productData.title;
+    }
+  }, 100);
+});
+
 const openModalBtns = document.querySelectorAll('[data-buttonmodalname]');
 const closeModalBtns = document.querySelectorAll('[data-closemodalname]');
 
@@ -26,7 +36,7 @@ const closeModalBtns = document.querySelectorAll('[data-closemodalname]');
 // close.addEventListener('click', closeRatingModal);
 
 function closeRatingModal() {
-  overlay.classList.add('close');
+  overlay.forEach((item) => item.classList.add('close'));
   successModal.classList.add('dnone');
   errorModal.classList.add('dnone');
   reviewModal.classList.remove('dnone');
@@ -34,6 +44,7 @@ function closeRatingModal() {
 }
 
 function resetRatingModal() {
+  formInput.value = productData.title;
   modalReviewForm.reset();
   reviewSendBtn.textContent = 'Отправить';
   reviewSendBtn.disabled = true;
@@ -48,11 +59,13 @@ openModalBtns.forEach((btn) => {
 });
 
 closeModalBtns.forEach((close) => {
-  close.addEventListener('click', () => closeModalForData(close));
+  close.addEventListener('click', () => {
+    resetRatingModal();
+    closeModalForData(close);
+  });
 });
 
-installBtn.addEventListener('click', () => {
-  const modalName = installBtn.getAttribute('data-buttonmodalname');
+function getElementsForDataAttribute(modalName) {
   const modalReview = document.querySelector(
     `[data-${modalName}] .modal__review`
   );
@@ -63,6 +76,23 @@ installBtn.addEventListener('click', () => {
     `[data-${modalName}] .modal__review--error`
   );
 
+  return { modalReview, modalSuccess, modalError };
+}
+
+formInstall.addEventListener('reset', (e) => {
+  e.preventDefault();
+  formInput.value = productData.title;
+  closeRatingModal();
+});
+
+formInstall.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const { modalReview, modalSuccess, modalError } =
+    getElementsForDataAttribute('installmodal');
+
+  formInstall.classList.add('dnone');
+  modalReview.querySelector('.install__progress').classList.remove('dnone');
+
   fetch(`${api}/api/UserProjects/create`, {
     method: 'POST',
     headers: {
@@ -70,7 +100,7 @@ installBtn.addEventListener('click', () => {
     },
     body: JSON.stringify({
       type: productData.type,
-      name: productData.title,
+      name: formInput.value,
     }),
   })
     .then((response) => response.json())
@@ -132,6 +162,7 @@ function openModalForData(e) {
   const modalName = e.target.getAttribute('data-buttonmodalname');
   document.querySelector(`[data-${modalName}]`).classList.remove('close');
 }
+
 function closeModalForData(closeBtn) {
   const modalName = closeBtn.getAttribute('data-closemodalname');
   document.querySelector(`[data-${modalName}]`).classList.add('close');

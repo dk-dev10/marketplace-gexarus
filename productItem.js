@@ -1,5 +1,27 @@
 let productData = {};
 
+const toggleFavourite = document.querySelector(
+  '.card__favorite__checkbox input'
+);
+
+toggleFavourite.addEventListener('click', (e) => {
+  console.log(productData);
+  const res = e.target.checked ? 1 : 0;
+  fetch(`${api}/api/AppStore/favourites/action`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id: productData.id,
+      status: res,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => console.log(data))
+    .catch((error) => console.error('Error:', error));
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   const api = 'https://gexarus.com';
 
@@ -21,9 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function setProduct(product) {
     const productTitle = document.querySelector('.product__page__title');
-    const productPrice = document.querySelector(
-      '.product__page__details--price .price'
-    );
+    const productPrice = document.querySelectorAll('.price');
     const productAuthorName = document.querySelector('.product__author__name');
     const productAuthorAVatar = document.querySelector(
       '.product__author__avatar img'
@@ -45,6 +65,19 @@ document.addEventListener('DOMContentLoaded', () => {
       '.review__card .star__rating'
     );
 
+    const productSliderParent = document.querySelector(
+      '.product__slider--wrapper'
+    );
+    const productSliderDotsParent = document.querySelector(
+      '#slider__dots--container'
+    );
+
+    CreateSliderWrapper(
+      product.files,
+      productSliderParent,
+      productSliderDotsParent
+    );
+
     product.rating.list.forEach((msg) =>
       setMessage(msg, reviewMessage, product.rating.average)
     );
@@ -53,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setMessageAvrageRating(resultArr, reviewCardStarRating);
 
     productTitle.textContent = product.title;
-    productPrice.textContent = product.price;
+    productPrice.forEach((pr) => (pr.textContent = product.price));
     productAuthorName.textContent = product.author.name;
     productAuthorAVatar.setAttribute('src', api + product.author.avatar);
     productFavourite.checked = product.favourite;
