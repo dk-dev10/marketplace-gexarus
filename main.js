@@ -2,6 +2,7 @@ const productCategories = document.querySelector('.product__categories');
 
 // fetchCategories().then((category) => createCategories(category));
 
+
 function createCategories(categories) {
   const labelAll = document.createElement('label');
   const checkboxAll = document.createElement('input');
@@ -197,9 +198,17 @@ function createProduct(product, wrap) {
 
   const productContentFooterBtn = document.createElement('button');
   productContentFooterBtn.classList.add('card__content--btn');
+  productContentFooterBtn.setAttribute('data-buttonmodalname', 'installmodal');
+
+  console.log('main js')
 
   productContentFooterBtn.addEventListener('click', (e) => {
     e.preventDefault();
+
+    // const formInstall = document?.querySelector('.modal__review--form');
+
+    // const formInput = formInstall?.querySelector('input');
+    // formInput.value = product.title;
   });
 
   const productContentFooterBtnSvg = `<svg

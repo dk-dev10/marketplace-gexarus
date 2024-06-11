@@ -9,16 +9,99 @@
     <link rel="stylesheet" href="slider.css" />
   </head>
   <body>
-    <div class="container">
+    <div class="gx__container">
       <div class="product__categories"></div>
       <div class="products__wrapper"></div>
     </div>
 
+    <div class="overlay close" data-ratingmodal>
+      <div class="modal">
+        <button
+          id="close"
+          class="popupBtnClose"
+          data-closemodalname="ratingmodal"
+        >
+          <svg width="15" height="15" class="">
+            <use xlink:href="#iconClose"></use>
+          </svg>
+        </button>
+        <div class="modal__review">
+          <h3>Оставить отзыв</h3>
+          <p class="modal__review--text">Понравилось приложение?</p>
+          <form id="modalReviewForm">
+            <div id="reviewStars-input">
+              <input id="star-5" type="radio" name="reviewStars" value="5" />
+              <label title="gorgeous" for="star-5">
+                <svg width="47" height="45" class="">
+                  <use xlink:href="#iconReviewStar"></use>
+                </svg>
+              </label>
+              <input id="star-4" type="radio" name="reviewStars" value="4" />
+              <label title="good" for="star-4">
+                <svg width="47" height="45" class="">
+                  <use xlink:href="#iconReviewStar"></use>
+                </svg>
+              </label>
+              <input id="star-3" type="radio" name="reviewStars" value="3" />
+              <label title="regular" for="star-3">
+                <svg width="47" height="45" class="">
+                  <use xlink:href="#iconReviewStar"></use>
+                </svg>
+              </label>
+              <input id="star-2" type="radio" name="reviewStars" value="2" />
+              <label title="poor" for="star-2">
+                <svg width="47" height="45" class="">
+                  <use xlink:href="#iconReviewStar"></use>
+                </svg>
+              </label>
+              <input id="star-1" type="radio" name="reviewStars" value="1" />
+              <label title="bad" for="star-1">
+                <svg width="47" height="45" class="">
+                  <use xlink:href="#iconReviewStar"></use>
+                </svg>
+              </label>
+            </div>
+
+            <textarea
+              class="modal__review__textarea"
+              name="modalReviewTextarea"
+              id="modalReviewTextarea"
+              placeholder="Написать отзыв"
+            ></textarea>
+            <button class="modal__review--send" type="submit" disabled="true">
+              Отправить
+            </button>
+          </form>
+        </div>
+        <div class="modal__review--success dnone">
+          <h3>Спасибо за отзыв!</h3>
+          <div>
+            <svg width="136" height="137" class="">
+              <use xlink:href="#iconHappyStar"></use>
+            </svg>
+          </div>
+          <p class="modal__review--success__text">
+            Ваше мнение поможет другим пользователям сделать правильный выбор
+          </p>
+        </div>
+        <div class="modal__review--error dnone">
+          <h3>Ошибка!</h3>
+          <div>
+            <svg width="136" height="137" class="">
+              <use xlink:href="#iconSadStar"></use>
+            </svg>
+          </div>
+          <p class="modal__review--success__text">
+            Ваше мнение поможет другим пользователям сделать правильный выбор
+          </p>
+        </div>
+      </div>
+    </div>
+
     <script src="fetchs.js"></script>
     <script src="favourite.js"></script>
-    <script src="main.js"></script>
+    <script  src="main.js"></script>
     <script src="slider.js"></script>
-    <script>
-    </script>
+    <script  src="popup.js"></script>
   </body>
 </html>

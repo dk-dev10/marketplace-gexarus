@@ -8,9 +8,9 @@
   font-family: 'Inter', sans-serif;
 }
 
-.container {
+.gx__container {
   width: 94%;
-  margin: 50px auto 0 !important;
+  margin: 10px auto 0 !important;
 }
 
 .card {
@@ -21,6 +21,7 @@
   text-decoration: none;
   min-width: 275px;
   max-width: 350px;
+  cursor: pointer;
   /* flex: 1 0 calc(25% - 30px); */
 }
 
@@ -1044,8 +1045,33 @@ button:disabled {
     bottom: 10px;
   }
 
-  .modal {
+  .gx__modal {
     width: 96%;
     padding: 16px 20px;
   }
+}
+
+.gx__product--nav-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gx__product--nav-wrapper .product__btn--outline {
+  font-size: clamp(0.75rem, 0.6121rem + 0.6897vw, 1rem);
+  padding: 1.2em 2.4em;
+  text-decoration: none;
+}
+
+.gx__product--nav-btn {
+  background: none;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #000;
+}
+
+a {
+  text-decoration: none;
 }
