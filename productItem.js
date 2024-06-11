@@ -27,8 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const url = new URL(window.location.href);
   const id = url.searchParams.get('id');
 
-  console.log(id);
-
   fetch(`${api}/api/AppStore/item`, {
     method: 'POST',
     headers: {

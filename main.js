@@ -169,24 +169,31 @@ function createProduct(product, wrap) {
   const productCardInstallersAvatars = document.createElement('div');
   productCardInstallersAvatars.classList.add('installers__avatars');
 
-  product.installers.forEach((installer) => {
-    const installerContainer = document.createElement('div');
-    installerContainer.classList.add('installer__avatar');
+  if (product.installers.length) {
+    product.installers.forEach((installer) => {
+      const installerContainer = document.createElement('div');
+      installerContainer.classList.add('installer__avatar');
 
-    if (installer.type === 'img') {
-      const installerContainerAvatar = document.createElement('img');
-      installerContainerAvatar.src = installer.img;
+      if (installer.type === 'img') {
+        const installerContainerAvatar = document.createElement('img');
+        installerContainerAvatar.src = installer.img;
 
-      installerContainer.appendChild(installerContainerAvatar);
-    } else {
-      const installerContainerText = document.createElement('p');
-      installerContainerText.textContent = installer.text;
+        installerContainer.appendChild(installerContainerAvatar);
+      } else {
+        const installerContainerText = document.createElement('p');
+        installerContainerText.textContent = installer.text;
 
-      installerContainer.appendChild(installerContainerText);
-    }
+        installerContainer.appendChild(installerContainerText);
+      }
 
-    productCardInstallersAvatars.appendChild(installerContainer);
-  });
+      productCardInstallersAvatars.appendChild(installerContainer);
+    });
+  } else {
+    const productCardInstallersEmpty = document.createElement('p');
+    productCardInstallersEmpty.classList.add('empty__installers');
+    productCardInstallersEmpty.textContent = 'Стань первым! Установи сборку';
+    productCardInstallersAvatars.appendChild(productCardInstallersEmpty);
+  }
 
   const productContentFooterBtn = document.createElement('button');
   productContentFooterBtn.classList.add('card__content--btn');
