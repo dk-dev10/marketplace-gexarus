@@ -185,21 +185,14 @@ function openModalInstall({ data, modalName }) {
   );
   let progressbarText = document.querySelector('.progress--text');
 
-  function defaultStateInstallModal() {
-    modalCloseBtn.disabled = false;
-    modal.classList.add('close');
-    modalReview.classList.remove('dnone');
-    installForm.classList.remove('dnone');
-    installProgress.classList.add('dnone');
-    modalError.classList.add('dnone');
-    modalSuccess.classList.add('dnone');
-  }
-
   installForm.addEventListener('reset', defaultStateInstallModal);
   modalCloseBtn.addEventListener('click', defaultStateInstallModal);
 
-  installForm.addEventListener('submit', () => {
-    console.log('void')
+  console.log();
+
+  installForm.addEventListener('submit', installFormSubmit);
+
+  function installFormSubmit() {
     installProgress.classList.remove('dnone');
     installForm.classList.add('dnone');
 
@@ -216,7 +209,18 @@ function openModalInstall({ data, modalName }) {
       progressbarText,
       modalCloseBtn,
     });
-  });
+  }
+
+  function defaultStateInstallModal() {
+    modalCloseBtn.disabled = false;
+    modal.classList.add('close');
+    modalReview.classList.remove('dnone');
+    installForm.classList.remove('dnone');
+    installProgress.classList.add('dnone');
+    modalError.classList.add('dnone');
+    modalSuccess.classList.add('dnone');
+    installForm.removeEventListener('submit', installFormSubmit);
+  }
 
   modal.classList.remove('close');
 }
