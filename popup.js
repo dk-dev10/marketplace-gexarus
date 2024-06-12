@@ -80,12 +80,6 @@ function getElementsForDataAttribute(modalName) {
   return { modalReview, modalSuccess, modalError, modal, modalCloseBtn };
 }
 
-formInstall?.addEventListener('reset', (e) => {
-  e.preventDefault();
-  formInput.value = productData.title;
-  closeRatingModal();
-});
-
 formInstall?.addEventListener('submit', (e) => {
   e.preventDefault();
   const { modalReview, modalSuccess, modalError } =
@@ -124,60 +118,59 @@ reviewMModalRating.forEach((star) => {
   });
 });
 
-modalReviewForm.addEventListener('submit', (e) => {
-  e.preventDefault();
+// modalReviewForm.addEventListener('submit', (e) => {
+//   e.preventDefault();
 
-  const formData = new FormData(modalReviewForm);
+//   const formData = new FormData(modalReviewForm);
 
-  reviewSendBtn.innerHTML = '<div class="pie"></div>';
-  reviewSendBtn.disabled = true;
+//   reviewSendBtn.innerHTML = '<div class="pie"></div>';
+//   reviewSendBtn.disabled = true;
 
-  fetch(`${api}/api/AppStore/reviewsSend`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      app_id: 14,
-      rating: formData.get('reviewStars'),
-      comment: formData.get('modalReviewTextarea'),
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.success) {
-        reviewModal.classList.add('dnone');
-        successModal.classList.remove('dnone');
-        setTimeout(() => {
-          closeRatingModal();
-        }, 3000);
+//   fetch(`${api}/api/AppStore/reviewsSend`, {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify({
+//       app_id: 14,
+//       rating: formData.get('reviewStars'),
+//       comment: formData.get('modalReviewTextarea'),
+//     }),
+//   })
+//     .then((response) => response.json())
+//     .then((data) => {
+//       if (data.success) {
+//         reviewModal.classList.add('dnone');
+//         successModal.classList.remove('dnone');
+//         setTimeout(() => {
+//           closeRatingModal();
+//         }, 3000);
 
-        const reviewMessage = document.querySelector('.review__messages');
-        const reviewCardStarRating = document.querySelector(
-          '.review__card .star__rating'
-        );
-        const productSummaryRating = document.querySelector(
-          '.review__card--block h1'
-        );
-        setMessage(data.review, reviewMessage, data.average);
-        productSummaryRating.textContent = data.average;
-        setMessageAvrageRating(
-          setMessageRating(data.average),
-          reviewCardStarRating
-        );
-      } else {
-        reviewModal.classList.add('dnone');
-        errorModal.classList.remove('dnone');
-        errorModal.querySelector('.modal__review--success__text').textContent =
-          data.err;
-        console.error('Error:', data);
-      }
-    })
-    .catch((error) => console.log('Error:', error));
-});
+//         const reviewMessage = document.querySelector('.review__messages');
+//         const reviewCardStarRating = document.querySelector(
+//           '.review__card .star__rating'
+//         );
+//         const productSummaryRating = document.querySelector(
+//           '.review__card--block h1'
+//         );
+//         setMessage(data.review, reviewMessage, data.average);
+//         productSummaryRating.textContent = data.average;
+//         setMessageAvrageRating(
+//           setMessageRating(data.average),
+//           reviewCardStarRating
+//         );
+//       } else {
+//         reviewModal.classList.add('dnone');
+//         errorModal.classList.remove('dnone');
+//         errorModal.querySelector('.modal__review--success__text').textContent =
+//           data.err;
+//         console.error('Error:', data);
+//       }
+//     })
+//     .catch((error) => console.log('Error:', error));
+// });
 
 function openModalInstall({ data, modalName }) {
-  console.log(modalName);
   const { modal, modalCloseBtn, modalReview, modalSuccess, modalError } =
     getElementsForDataAttribute(modalName);
 
@@ -192,7 +185,21 @@ function openModalInstall({ data, modalName }) {
   );
   let progressbarText = document.querySelector('.progress--text');
 
+  function defaultStateInstallModal() {
+    modalCloseBtn.disabled = false;
+    modal.classList.add('close');
+    modalReview.classList.remove('dnone');
+    installForm.classList.remove('dnone');
+    installProgress.classList.add('dnone');
+    modalError.classList.add('dnone');
+    modalSuccess.classList.add('dnone');
+  }
+
+  installForm.addEventListener('reset', defaultStateInstallModal);
+  modalCloseBtn.addEventListener('click', defaultStateInstallModal);
+
   installForm.addEventListener('submit', () => {
+    console.log('void')
     installProgress.classList.remove('dnone');
     installForm.classList.add('dnone');
 
@@ -212,9 +219,6 @@ function openModalInstall({ data, modalName }) {
   });
 
   modal.classList.remove('close');
-  modalCloseBtn.addEventListener('click', () => {
-    modal.classList.add('close');
-  });
 }
 
 function installFetch(args) {
@@ -241,7 +245,6 @@ function installFetch(args) {
   fetchCreateApp({ type: appType, name: appName })
     .then((response) => response.json())
     .then((data) => {
-      console.log('hha');
       function checkStatusBar(id) {
         fetchCreateAppStatus(id)
           .then((response) => response.json())
