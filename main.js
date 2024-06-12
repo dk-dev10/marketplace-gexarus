@@ -2,7 +2,6 @@ const productCategories = document.querySelector('.product__categories');
 
 // fetchCategories().then((category) => createCategories(category));
 
-
 function createCategories(categories) {
   const labelAll = document.createElement('label');
   const checkboxAll = document.createElement('input');
@@ -200,7 +199,12 @@ function createProduct(product, wrap) {
   productContentFooterBtn.classList.add('card__content--btn');
   productContentFooterBtn.setAttribute('data-buttonmodalname', 'installmodal');
 
-  console.log('main js')
+  productContentFooterBtn.addEventListener('click', (e) => {
+    openModalInstall({
+      data: product,
+      modalName: 'installmodal',
+    });
+  });
 
   productContentFooterBtn.addEventListener('click', (e) => {
     e.preventDefault();

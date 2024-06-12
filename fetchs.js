@@ -42,3 +42,23 @@ async function fetchCategories(params = {}) {
 async function fetchCategoriesFavourite(params = {}) {
   return await fetchCategories({ favourites: 1, ...params });
 }
+
+async function fetchCreateApp({ type, name }) {
+  return await fetch(`${api}/api/UserProjects/create`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ type, name }),
+  });
+}
+
+async function fetchCreateAppStatus(id) {
+  return await fetch(`${api}/api/UserProjects/getStatus`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ id }),
+  });
+}

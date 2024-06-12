@@ -14,94 +14,77 @@
       <div class="products__wrapper"></div>
     </div>
 
-    <div class="overlay close" data-ratingmodal>
+    <div class="overlay close" data-installmodal>
       <div class="modal">
         <button
           id="close"
           class="popupBtnClose"
-          data-closemodalname="ratingmodal"
+          data-closemodalname="installmodal"
         >
           <svg width="15" height="15" class="">
             <use xlink:href="#iconClose"></use>
           </svg>
         </button>
         <div class="modal__review">
-          <h3>Оставить отзыв</h3>
-          <p class="modal__review--text">Понравилось приложение?</p>
-          <form id="modalReviewForm">
-            <div id="reviewStars-input">
-              <input id="star-5" type="radio" name="reviewStars" value="5" />
-              <label title="gorgeous" for="star-5">
-                <svg width="47" height="45" class="">
-                  <use xlink:href="#iconReviewStar"></use>
-                </svg>
-              </label>
-              <input id="star-4" type="radio" name="reviewStars" value="4" />
-              <label title="good" for="star-4">
-                <svg width="47" height="45" class="">
-                  <use xlink:href="#iconReviewStar"></use>
-                </svg>
-              </label>
-              <input id="star-3" type="radio" name="reviewStars" value="3" />
-              <label title="regular" for="star-3">
-                <svg width="47" height="45" class="">
-                  <use xlink:href="#iconReviewStar"></use>
-                </svg>
-              </label>
-              <input id="star-2" type="radio" name="reviewStars" value="2" />
-              <label title="poor" for="star-2">
-                <svg width="47" height="45" class="">
-                  <use xlink:href="#iconReviewStar"></use>
-                </svg>
-              </label>
-              <input id="star-1" type="radio" name="reviewStars" value="1" />
-              <label title="bad" for="star-1">
-                <svg width="47" height="45" class="">
-                  <use xlink:href="#iconReviewStar"></use>
-                </svg>
-              </label>
-            </div>
-
-            <textarea
+          <h3>Установка проекта</h3>
+          <form action="submit" class="modal__review--form">
+            <input
+              type="text"
+              name="product__name"
+              id=""
               class="modal__review__textarea"
-              name="modalReviewTextarea"
-              id="modalReviewTextarea"
-              placeholder="Написать отзыв"
-            ></textarea>
-            <button class="modal__review--send" type="submit" disabled="true">
-              Отправить
-            </button>
+            />
+            <div class="modal__review--form-btns">
+              <button type="reset">Cancel</button>
+              <button type="submit">Установить</button>
+            </div>
           </form>
+          <div class="install__progress dnone">
+            <div class="install__progress--details">
+              <p class="progress--text">В очереди</p>
+              <div class="progress--percentage">
+                <span class="percentage">0%</span>
+                <span>
+                  <svg width="8" height="8" class="">
+                    <use xlink:href="#iconInstallArrow"></use>
+                  </svg>
+                </span>
+              </div>
+            </div>
+            <div class="install__progress--bar">
+              <div class="install__progress--fill"></div>
+            </div>
+          </div>
         </div>
         <div class="modal__review--success dnone">
-          <h3>Спасибо за отзыв!</h3>
+          <h3>Бот для регистрации установлен!</h3>
           <div>
-            <svg width="136" height="137" class="">
-              <use xlink:href="#iconHappyStar"></use>
+            <svg width="148" height="148" class="">
+              <use xlink:href="#iconHappySticker"></use>
             </svg>
           </div>
-          <p class="modal__review--success__text">
-            Ваше мнение поможет другим пользователям сделать правильный выбор
-          </p>
+          <p class="modal__review--success__text">Спасибо за доверие</p>
+          <a href="/buso" class="install__modal--btn">продолжить покупки</a>
         </div>
         <div class="modal__review--error dnone">
           <h3>Ошибка!</h3>
           <div>
-            <svg width="136" height="137" class="">
-              <use xlink:href="#iconSadStar"></use>
+            <svg width="148" height="148" class="">
+              <use xlink:href="#iconSadSticker"></use>
             </svg>
           </div>
           <p class="modal__review--success__text">
-            Ваше мнение поможет другим пользователям сделать правильный выбор
+            К сожалению установка была прервана. Повторите попытку позже
           </p>
+          <a class="install__modal--btn">продолжить покупки</a>
         </div>
       </div>
     </div>
 
     <script src="fetchs.js"></script>
+    <script src="popup.js"></script>
     <script src="favourite.js"></script>
-    <script  src="main.js"></script>
+    <script src="main.js"></script>
     <script src="slider.js"></script>
-    <script  src="popup.js"></script>
   </body>
 </html>

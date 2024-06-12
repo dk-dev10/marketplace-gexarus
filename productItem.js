@@ -74,6 +74,19 @@ document.addEventListener('DOMContentLoaded', () => {
       '#slider__dots--container'
     );
 
+    const installBtns = document.querySelectorAll(
+      '[data-buttonmodalname="installmodal"]'
+    );
+
+    installBtns.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        openModalInstall({
+          data: product,
+          modalName: e.target.getAttribute('data-buttonmodalname'),
+        });
+      });
+    });
+
     CreateSliderWrapper(
       product.files,
       productSliderParent,

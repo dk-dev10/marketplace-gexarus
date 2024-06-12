@@ -14,10 +14,77 @@
       <div class="products__wrapper"></div>
     </div>
 
+    <div class="overlay close" data-installmodal>
+      <div class="modal">
+        <button
+          id="close"
+          class="popupBtnClose"
+          data-closemodalname="installmodal"
+        >
+          <svg width="15" height="15" class="">
+            <use xlink:href="#iconClose"></use>
+          </svg>
+        </button>
+        <div class="modal__review">
+          <h3>Установка проекта</h3>
+          <form action="submit" class="modal__review--form">
+            <input
+              type="text"
+              name="product__name"
+              id=""
+              class="modal__review__textarea"
+            />
+            <div class="modal__review--form-btns">
+              <button type="reset">Cancel</button>
+              <button type="submit">Установить</button>
+            </div>
+          </form>
+          <div class="install__progress dnone">
+            <div class="install__progress--details">
+              <p class="progress--text">В очереди</p>
+              <div class="progress--percentage">
+                <span class="percentage">0%</span>
+                <span>
+                  <svg width="8" height="8" class="">
+                    <use xlink:href="#iconInstallArrow"></use>
+                  </svg>
+                </span>
+              </div>
+            </div>
+            <div class="install__progress--bar">
+              <div class="install__progress--fill"></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal__review--success dnone">
+          <h3>Бот для регистрации установлен!</h3>
+          <div>
+            <svg width="148" height="148" class="">
+              <use xlink:href="#iconHappySticker"></use>
+            </svg>
+          </div>
+          <p class="modal__review--success__text">Спасибо за доверие</p>
+          <a href="/buso" class="install__modal--btn">продолжить покупки</a>
+        </div>
+        <div class="modal__review--error dnone">
+          <h3>Ошибка!</h3>
+          <div>
+            <svg width="148" height="148" class="">
+              <use xlink:href="#iconSadSticker"></use>
+            </svg>
+          </div>
+          <p class="modal__review--success__text">
+            К сожалению установка была прервана. Повторите попытку позже
+          </p>
+          <a class="install__modal--btn">продолжить покупки</a>
+        </div>
+      </div>
+    </div>
+
+    <script src="popup.js"></script>
     <script src="fetchs.js"></script>
     <script src="fetchStore.js"></script>
     <script src="main.js"></script>
     <script src="slider.js"></script>
-    <script src="popup.js"></script>
   </body>
 </html>

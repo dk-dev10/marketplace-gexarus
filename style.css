@@ -1075,3 +1075,7 @@ button:disabled {
 a {
   text-decoration: none;
 }
+
+button:disabled {
+  cursor: not-allowed;
+}
