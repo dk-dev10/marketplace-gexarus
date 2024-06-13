@@ -1,36 +1,79 @@
-const overlay = document.querySelectorAll('.overlay');
-
-const reviewSendBtn = document.querySelector('.modal__review--send');
-const modalReviewForm = document.querySelector('#modalReviewForm');
-const reviewModal = document.querySelector('.modal__review');
-const successModal = document.querySelector('.modal__review--success');
-const errorModal = document.querySelector('.modal__review--error');
-const reviewMModalRating = document.querySelectorAll(
-  'input[name="reviewStars"]'
-);
-const formInstall = document?.querySelector('.modal__review--form');
-
-const formInput = formInstall?.querySelector('input');
-
-document.addEventListener('DOMContentLoaded', () => {
-  // const checkDataInterval = setInterval(() => {
-  //   if (Object.keys(productData).length !== 0) {
-  //     clearInterval(checkDataInterval);
-  //     formInput.value = productData.title;
-  //   }
-  // }, 100);
-});
-
-const openModalBtns = document.querySelectorAll('[data-buttonmodalname]');
-const closeModalBtns = document.querySelectorAll('[data-closemodalname]');
-
 // overlay.addEventListener('click', (e) => {
 //   if (e.target === overlay) {
 //     overlay.classList.add('close');
 //   }
 // });
 
-// close.addEventListener('click', closeRatingModal);
+function openModalReview() {
+  const overlay = document.querySelectorAll('.overlay');
+  const reviewSendBtn = document.querySelector('.modal__review--send');
+  const modalReviewForm = document.querySelector('#modalReviewForm');
+  const reviewModal = document.querySelector('.modal__review');
+  const successModal = document.querySelector('.modal__review--success');
+  const errorModal = document.querySelector('.modal__review--error');
+  const reviewMModalRating = document.querySelectorAll(
+    'input[name="reviewStars"]'
+  );
+
+  reviewMModalRating.forEach((star) => {
+    star.addEventListener('click', () => {
+      reviewSendBtn.disabled = false;
+    });
+  });
+
+  modalReviewForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(modalReviewForm);
+
+    reviewSendBtn.innerHTML = '<div class="pie"></div>';
+    reviewSendBtn.disabled = true;
+
+    fetch(`${api}/api/AppStore/reviewsSend`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        app_id: 14,
+        rating: formData.get('reviewStars'),
+        comment: formData.get('modalReviewTextarea'),
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          reviewModal.classList.add('dnone');
+          successModal.classList.remove('dnone');
+          setTimeout(() => {
+            closeRatingModal();
+          }, 3000);
+
+          const reviewMessage = document.querySelector('.review__messages');
+          const reviewCardStarRating = document.querySelector(
+            '.review__card .star__rating'
+          );
+          const productSummaryRating = document.querySelector(
+            '.review__card--block h1'
+          );
+          setMessage(data.review, reviewMessage, data.average);
+          productSummaryRating.textContent = data.average;
+          setMessageAvrageRating(
+            setMessageRating(data.average),
+            reviewCardStarRating
+          );
+        } else {
+          reviewModal.classList.add('dnone');
+          errorModal.classList.remove('dnone');
+          errorModal.querySelector(
+            '.modal__review--success__text'
+          ).textContent = data.err;
+          console.error('Error:', data);
+        }
+      })
+      .catch((error) => console.log('Error:', error));
+  });
+}
 
 function closeRatingModal() {
   overlay.forEach((item) => item.classList.add('close'));
@@ -51,49 +94,6 @@ function resetRatingModal() {
 //   overlay.classList.remove('close');
 // });
 
-openModalBtns.forEach((btn) => {
-  btn.addEventListener('click', () => {
-    openModalForData();
-  });
-});
-
-closeModalBtns.forEach((close) => {
-  // close.addEventListener('click', () => {
-  //   resetRatingModal();
-  //   closeModalForData(close);
-  // });
-});
-
-function getElementsForDataAttribute(modalName) {
-  const modal = document.querySelector(`[data-${modalName}]`);
-  const modalCloseBtn = document.querySelector(`[data-${modalName}] #close`);
-  const modalReview = document.querySelector(
-    `[data-${modalName}] .modal__review`
-  );
-  const modalSuccess = document.querySelector(
-    `[data-${modalName}] .modal__review--success`
-  );
-  const modalError = document.querySelector(
-    `[data-${modalName}] .modal__review--error`
-  );
-
-  return { modalReview, modalSuccess, modalError, modal, modalCloseBtn };
-}
-
-formInstall?.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const { modalReview, modalSuccess, modalError } =
-    getElementsForDataAttribute('installmodal');
-
-  formInstall.classList.add('dnone');
-  modalReview.querySelector('.install__progress').classList.remove('dnone');
-});
-
-function openModalForData(e) {
-  // const modalName = e.target.getAttribute('data-buttonmodalname');
-  // document.querySelector(`[data-${modalName}]`).classList.remove('close');
-}
-
 function closeModalForData(closeBtn) {
   const modalName = closeBtn.getAttribute('data-closemodalname');
   document.querySelector(`[data-${modalName}]`).classList.add('close');
@@ -112,63 +112,21 @@ function closeModalForData(closeBtn) {
   modalError.classList.add('dnone');
 }
 
-reviewMModalRating.forEach((star) => {
-  star.addEventListener('click', () => {
-    reviewSendBtn.disabled = false;
-  });
-});
+function getElementsForDataAttribute(modalName) {
+  const modal = document.querySelector(`[data-${modalName}]`);
+  const modalCloseBtn = document.querySelector(`[data-${modalName}] #close`);
+  const modalReview = document.querySelector(
+    `[data-${modalName}] .modal__review`
+  );
+  const modalSuccess = document.querySelector(
+    `[data-${modalName}] .modal__review--success`
+  );
+  const modalError = document.querySelector(
+    `[data-${modalName}] .modal__review--error`
+  );
 
-// modalReviewForm.addEventListener('submit', (e) => {
-//   e.preventDefault();
-
-//   const formData = new FormData(modalReviewForm);
-
-//   reviewSendBtn.innerHTML = '<div class="pie"></div>';
-//   reviewSendBtn.disabled = true;
-
-//   fetch(`${api}/api/AppStore/reviewsSend`, {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify({
-//       app_id: 14,
-//       rating: formData.get('reviewStars'),
-//       comment: formData.get('modalReviewTextarea'),
-//     }),
-//   })
-//     .then((response) => response.json())
-//     .then((data) => {
-//       if (data.success) {
-//         reviewModal.classList.add('dnone');
-//         successModal.classList.remove('dnone');
-//         setTimeout(() => {
-//           closeRatingModal();
-//         }, 3000);
-
-//         const reviewMessage = document.querySelector('.review__messages');
-//         const reviewCardStarRating = document.querySelector(
-//           '.review__card .star__rating'
-//         );
-//         const productSummaryRating = document.querySelector(
-//           '.review__card--block h1'
-//         );
-//         setMessage(data.review, reviewMessage, data.average);
-//         productSummaryRating.textContent = data.average;
-//         setMessageAvrageRating(
-//           setMessageRating(data.average),
-//           reviewCardStarRating
-//         );
-//       } else {
-//         reviewModal.classList.add('dnone');
-//         errorModal.classList.remove('dnone');
-//         errorModal.querySelector('.modal__review--success__text').textContent =
-//           data.err;
-//         console.error('Error:', data);
-//       }
-//     })
-//     .catch((error) => console.log('Error:', error));
-// });
+  return { modalReview, modalSuccess, modalError, modal, modalCloseBtn };
+}
 
 function openModalInstall({ data, modalName }) {
   const { modal, modalCloseBtn, modalReview, modalSuccess, modalError } =
