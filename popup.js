@@ -1,19 +1,21 @@
-// overlay.addEventListener('click', (e) => {
-//   if (e.target === overlay) {
-//     overlay.classList.add('close');
-//   }
-// });
+function openModalReview({ modalName, appId }) {
+  const overlay = document.querySelector(`[data-${modalName}]`);
+  const reviewForm = overlay.querySelector('form');
+  const reviewModal = overlay.querySelector('.modal__review');
+  const successModal = overlay.querySelector('.modal__review--success');
+  const errorModal = overlay.querySelector('.modal__review--error');
 
-function openModalReview() {
-  const overlay = document.querySelectorAll('.overlay');
-  const reviewSendBtn = document.querySelector('.modal__review--send');
   const modalReviewForm = document.querySelector('#modalReviewForm');
-  const reviewModal = document.querySelector('.modal__review');
-  const successModal = document.querySelector('.modal__review--success');
-  const errorModal = document.querySelector('.modal__review--error');
   const reviewMModalRating = document.querySelectorAll(
     'input[name="reviewStars"]'
   );
+
+  function defaultStateReview() {
+    reviewForm.removeEventListener('submit', reviewFormSubmit);
+    // const
+  }
+
+  overlay.classList.remove('close');
 
   reviewMModalRating.forEach((star) => {
     star.addEventListener('click', () => {
@@ -21,7 +23,8 @@ function openModalReview() {
     });
   });
 
-  modalReviewForm.addEventListener('submit', (e) => {
+  reviewForm.addEventListener('submit', reviewFormSubmit);
+  function reviewFormSubmit(e) {
     e.preventDefault();
 
     const formData = new FormData(modalReviewForm);
@@ -35,7 +38,7 @@ function openModalReview() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        app_id: 14,
+        app_id: appId,
         rating: formData.get('reviewStars'),
         comment: formData.get('modalReviewTextarea'),
       }),
@@ -46,7 +49,7 @@ function openModalReview() {
           reviewModal.classList.add('dnone');
           successModal.classList.remove('dnone');
           setTimeout(() => {
-            closeRatingModal();
+            // closeRatingModal();
           }, 3000);
 
           const reviewMessage = document.querySelector('.review__messages');
@@ -72,27 +75,8 @@ function openModalReview() {
         }
       })
       .catch((error) => console.log('Error:', error));
-  });
+  }
 }
-
-function closeRatingModal() {
-  overlay.forEach((item) => item.classList.add('close'));
-  successModal.classList.add('dnone');
-  errorModal.classList.add('dnone');
-  reviewModal.classList.remove('dnone');
-  resetRatingModal();
-}
-
-function resetRatingModal() {
-  formInput.value = productData.title;
-  modalReviewForm.reset();
-  reviewSendBtn.textContent = 'Отправить';
-  reviewSendBtn.disabled = true;
-}
-
-// open.addEventListener('click', () => {
-//   overlay.classList.remove('close');
-// });
 
 function closeModalForData(closeBtn) {
   const modalName = closeBtn.getAttribute('data-closemodalname');

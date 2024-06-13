@@ -74,6 +74,17 @@ document.addEventListener('DOMContentLoaded', () => {
       '#slider__dots--container'
     );
 
+    const ratingModal = document.querySelector(
+      '[data-buttonmodalname="ratingmodal"]'
+    );
+
+    ratingModal.addEventListener('click', () => {
+      openModalReview({
+        appId: product.id,
+        modalName: 'ratingModal',
+      });
+    });
+
     const installBtns = document.querySelectorAll(
       '[data-buttonmodalname="installmodal"]'
     );
