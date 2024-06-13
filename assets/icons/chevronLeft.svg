@@ -1,0 +1,6 @@
+<svg display="none"
+  xmlns="http://www.w3.org/2000/svg">
+  <symbol id="chevronLeft">
+    <path d="M7 1L1 7L7 13" stroke-width="1.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
+  </symbol>
+</svg>

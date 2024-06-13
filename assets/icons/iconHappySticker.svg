@@ -1,0 +1,9 @@
+<svg style="display: none" fill="none"
+  xmlns="http://www.w3.org/2000/svg">
+  <symbol id="iconHappySticker">
+    <path d="M74 146.5C114.041 146.5 146.5 114.041 146.5 74C146.5 33.9593 114.041 1.5 74 1.5C33.9593 1.5 1.5 33.9593 1.5 74C1.5 114.041 33.9593 146.5 74 146.5Z" fill="#2388FF" stroke="#2388FF" stroke-width="2" stroke-linejoin="round" />
+    <path fill="none" d="M99.375 99.375C99.375 99.375 92.125 113.875 74 113.875C55.875 113.875 48.625 99.375 48.625 99.375" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M99.375 59.5V63.125" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M48.625 59.5V63.125" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+  </symbol>
+</svg>

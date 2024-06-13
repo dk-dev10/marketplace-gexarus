@@ -140,17 +140,17 @@ function setMessageAvrageRating(arr, wrapper) {
   wrapper.innerHTML = '';
   arr.forEach((item) => {
     const fullSvg = `<svg width="20" height="19" fill="none">
-    <use xlink:href="#iconMessageRatingStar"></use>
+    <use xlink:href="assets/icons/iconMessageRatingStar.svg#iconMessageRatingStar"></use>
     </svg>`;
     const full = document.createElement('div');
     full.innerHTML = fullSvg;
     const halfSvg = `<svg width="20" height="19" fill="none">
-    <use xlink:href="#iconMessageRatingStarHalf"></use>
+    <use xlink:href="assets/icons/iconMessageRatingStarHalf.svg#iconMessageRatingStarHalf"></use>
     </svg>`;
     const half = document.createElement('div');
     half.innerHTML = halfSvg;
     const emptySvg = `<svg width="20" height="19" fill="none">
-      <use xlink:href="#iconMessageRatingStarEmpty"></use>
+      <use xlink:href="assets/icons/iconMessageRatingStarEmpty.svg#iconMessageRatingStarEmpty"></use>
       </svg>`;
     const empty = document.createElement('div');
     empty.innerHTML = emptySvg;
@@ -196,10 +196,10 @@ function setMessage(message, reviewMessage) {
     const messageRatingSpan = document.createElement('span');
     messageRatingSpan.classList.add('progressbar__star');
     const messageStarEmpty = `<svg width="15" height="15" fill="none">
-    <use xlink:href="#iconSmallEmptyStar"></use>
+    <use xlink:href="assets/icons/iconSmallEmptyStar.svg#iconSmallEmptyStar"></use>
   </svg>`;
     const messageStar = `<svg width="15" height="15" fill="none">
-    <use xlink:href="#iconSmallFillStar"></use>
+    <use xlink:href="assets/icons/iconSmallFillStar.svg#iconSmallFillStar"></use>
   </svg>`;
 
     if (star === 1) {
