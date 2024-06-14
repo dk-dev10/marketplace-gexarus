@@ -38,7 +38,8 @@ function CreateDots(count, slider, parent) {
     const dot = document.createElement('button');
     dot.className = 'dot';
     dot.dataset.slide = i;
-    dot.addEventListener('click', () => {
+    dot.addEventListener('click', (e) => {
+      e.preventDefault()
       slider.scrollLeft = i * slider.clientWidth;
       UpdateActiveDot(i, dots);
     });

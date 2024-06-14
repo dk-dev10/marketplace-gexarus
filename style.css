@@ -211,7 +211,7 @@ body {
   font-weight: 400;
   font-size: 15px;
   line-height: 18.15px;
-  color: #004a7b;
+  color: #0D6EFD;
 }
 
 .product__description {
@@ -243,6 +243,10 @@ body {
   align-items: center;
   cursor: pointer;
   z-index: 9;
+}
+
+.card__content--btn:not(:first-child) {
+  margin-left: 8px;
 }
 
 .card__content--footer {

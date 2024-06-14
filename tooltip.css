@@ -9,7 +9,7 @@
 }
 
 .tooltip__content {
-  padding: 0 5px;
+  padding: 4px 12px;
   font-size: 12px;
   line-height: 20px;
   border-radius: 10px;
@@ -19,7 +19,7 @@
   top: 120%;
   left: 50%;
   transform: translateX(-50%);
-  width: 100%;
+  width: max-content;
   max-width: 150px;
   visibility: hidden;
   opacity: 0;

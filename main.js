@@ -152,54 +152,42 @@ function createProduct(product, wrap) {
   productCardDetailsHeader.appendChild(productCardDetailsTitle);
   productCardDetailsHeader.appendChild(productCardDetailsPrice);
 
-  const productCardDetailsDescription = document.createElement('p');
-  productCardDetailsDescription.classList.add('product__description');
-  productCardDetailsDescription.textContent = product.description;
-
   productCardDetails.appendChild(productCardDetailsHeader);
-  productCardDetails.appendChild(productCardDetailsDescription);
 
   // PRODUCT INSTALLERS
   const productContentFooter = document.createElement('div');
   productContentFooter.classList.add('card__content--footer');
 
-  const productCardInstalled = document.createElement('div');
-  productCardInstalled.classList.add('card__installed__product');
+  const productContentFooterBtnComment = document.createElement('a');
+  productContentFooterBtnComment.classList.add(
+    'card__content--btn',
+    'tooltip__wrapper'
+  );
+  productContentFooterBtnComment.setAttribute('data-anchor', '');
+  productContentFooterBtnComment.setAttribute(
+    'href',
+    `/productPage.html?id=${product.id}#review-anchor`
+  );
+  productContentFooterBtnComment.onclick = function (e) {
+    e.preventDefault();
+    goToAnchor(e, `/productPage.html?id=${product.id}`, 'review-anchor');
+  };
 
-  const productCardInstallersAvatars = document.createElement('div');
-  productCardInstallersAvatars.classList.add('installers__avatars');
-
-  if (product.installers.length) {
-    product.installers.forEach((installer) => {
-      const installerContainer = document.createElement('div');
-      installerContainer.classList.add('installer__avatar');
-
-      if (installer.type === 'img') {
-        const installerContainerAvatar = document.createElement('img');
-        installerContainerAvatar.src = installer.img;
-
-        installerContainer.appendChild(installerContainerAvatar);
-      } else {
-        const installerContainerText = document.createElement('p');
-        installerContainerText.textContent = installer.text;
-
-        installerContainer.appendChild(installerContainerText);
-      }
-
-      productCardInstallersAvatars.appendChild(installerContainer);
-    });
-  } else {
-    const productCardInstallersEmpty = document.createElement('p');
-    productCardInstallersEmpty.classList.add('empty__installers');
-    productCardInstallersEmpty.textContent = 'Стань первым! Установи сборку';
-    productCardInstallersAvatars.appendChild(productCardInstallersEmpty);
-  }
+  const productContentFooterBtnCommentTooltip = document.createElement('span');
+  productContentFooterBtnCommentTooltip.classList.add('tooltip__content');
+  productContentFooterBtnCommentTooltip.textContent = 'Читать отзывы';
 
   const productContentFooterBtn = document.createElement('button');
-  productContentFooterBtn.classList.add('card__content--btn');
+  productContentFooterBtn.classList.add(
+    'card__content--btn',
+    'tooltip__wrapper'
+  );
   productContentFooterBtn.setAttribute('data-buttonmodalname', 'installmodal');
+  const productContentFooterBtnTooltip = document.createElement('span');
+  productContentFooterBtnTooltip.classList.add('tooltip__content');
+  productContentFooterBtnTooltip.textContent = 'Установить';
 
-  productContentFooterBtn.addEventListener('click', (e) => {
+  productContentFooterBtn.addEventListener('click', () => {
     openModalInstall({
       data: product,
       modalName: 'installmodal',
@@ -214,6 +202,18 @@ function createProduct(product, wrap) {
     // const formInput = formInstall?.querySelector('input');
     // formInput.value = product.title;
   });
+
+  const productContentFooterCommentBtnSvg = `<svg width="22" height="22" fill='currentColor' >
+                    <use
+                      xlink:href="assets/icons/comment.svg#iconComment"
+                    ></use>
+                  </svg>`;
+  const commentBtn = document.createElement('div');
+  commentBtn.innerHTML = productContentFooterCommentBtnSvg;
+  productContentFooterBtnComment.appendChild(commentBtn.firstChild);
+  productContentFooterBtnComment.appendChild(
+    productContentFooterBtnCommentTooltip
+  );
 
   const productContentFooterBtnSvg = `<svg
   width="20"
@@ -242,8 +242,9 @@ function createProduct(product, wrap) {
   const tempBtn = document.createElement('div');
   tempBtn.innerHTML = productContentFooterBtnSvg;
   productContentFooterBtn.appendChild(tempBtn.firstChild);
+  productContentFooterBtn.appendChild(productContentFooterBtnTooltip);
 
-  productContentFooter.appendChild(productCardInstallersAvatars);
+  productContentFooter.appendChild(productContentFooterBtnComment);
   productContentFooter.appendChild(productContentFooterBtn);
 
   // PRODUCT FAVORITE LABEL

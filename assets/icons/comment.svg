@@ -1,0 +1,10 @@
+<svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+  xmlns="http://www.w3.org/2000/svg">
+  <symbol id='iconComment' >
+    <path d="M20.1667 11C20.1667 16.0626 16.0627 20.1667 11.0001 20.1667C8.2622 20.1667 1.83337 20.1667 1.83337 20.1667C1.83337 20.1667 1.83337 13.3248 1.83337 11C1.83337 5.93738 5.93745 1.83333 11.0001 1.83333C16.0627 1.83333 20.1667 5.93738 20.1667 11Z" fill="#8C908F" stroke="#8C908F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M6.41663 8.25H14.6666" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M6.41663 11.9167H14.6666" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M6.41663 15.5833H11" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- <path d="M6.41663 15.5833H11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> -->
+  </symbol>
+</svg>
