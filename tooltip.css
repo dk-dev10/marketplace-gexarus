@@ -1,0 +1,78 @@
+.tooltip__wrapper {
+  position: relative;
+  width: max-content;
+}
+
+.tooltip__wrapper:hover .tooltip__content {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip__content {
+  padding: 0 5px;
+  font-size: 12px;
+  line-height: 20px;
+  border-radius: 10px;
+  color: #b9bdbc;
+  background-color: black;
+  position: absolute;
+  top: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 150px;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.2s ease;
+  transition-delay: 0.5s;
+}
+
+.tooltip__content::after {
+  display: block;
+  content: '';
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent black transparent;
+  top: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  position: absolute;
+}
+
+.tooltip__content-top {
+  bottom: 120%;
+  top: auto;
+}
+.tooltip__content-top::after {
+  left: 50%;
+  bottom: -9px;
+  top: auto;
+  transform: translateX(-50%);
+  border-color: black transparent transparent transparent;
+}
+
+.tooltip__content-right {
+  top: 50%;
+  right: 110%;
+  left: auto;
+  transform: translateY(-50%);
+}
+.tooltip__content-right::after {
+  top: 50%;
+  right: -9px;
+  left: auto;
+  transform: translateY(-50%);
+  border-color: transparent transparent transparent black;
+}
+
+.tooltip__content-left {
+  top: 50%;
+  left: 110%;
+  transform: translateY(-50%);
+}
+.tooltip__content-left::after {
+  top: 50%;
+  left: -9px;
+  transform: translateY(-50%);
+  border-color: transparent black transparent transparent;
+}
