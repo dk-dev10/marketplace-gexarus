@@ -4,6 +4,8 @@ function openModalReview({ modalName, appId }) {
   const reviewModal = overlay.querySelector('.modal__review');
   const successModal = overlay.querySelector('.modal__review--success');
   const errorModal = overlay.querySelector('.modal__review--error');
+  const formSubmitBtn = reviewForm.querySelector('button');
+  const overlayClose = overlay.querySelector('#close');
 
   const modalReviewForm = document.querySelector('#modalReviewForm');
   const reviewMModalRating = document.querySelectorAll(
@@ -11,26 +13,35 @@ function openModalReview({ modalName, appId }) {
   );
 
   function defaultStateReview() {
+    overlay.classList.add('close');
+    reviewModal.classList.remove('dnone');
+    successModal.classList.add('dnone');
+    errorModal.classList.add('dnone');
+    modalReviewForm.reset();
+    formSubmitBtn.textContent = 'Отправить';
     reviewForm.removeEventListener('submit', reviewFormSubmit);
-    // const
+    overlayClose.removeEventListener('click', defaultStateReview);
   }
+
+  overlayClose.addEventListener('click', defaultStateReview);
 
   overlay.classList.remove('close');
 
   reviewMModalRating.forEach((star) => {
     star.addEventListener('click', () => {
-      reviewSendBtn.disabled = false;
+      formSubmitBtn.disabled = false;
     });
   });
 
   reviewForm.addEventListener('submit', reviewFormSubmit);
+
   function reviewFormSubmit(e) {
     e.preventDefault();
 
     const formData = new FormData(modalReviewForm);
 
-    reviewSendBtn.innerHTML = '<div class="pie"></div>';
-    reviewSendBtn.disabled = true;
+    formSubmitBtn.innerHTML = '<div class="pie"></div>';
+    formSubmitBtn.disabled = true;
 
     fetch(`${api}/api/AppStore/reviewsSend`, {
       method: 'POST',
@@ -48,9 +59,6 @@ function openModalReview({ modalName, appId }) {
         if (data.success) {
           reviewModal.classList.add('dnone');
           successModal.classList.remove('dnone');
-          setTimeout(() => {
-            // closeRatingModal();
-          }, 3000);
 
           const reviewMessage = document.querySelector('.review__messages');
           const reviewCardStarRating = document.querySelector(
@@ -76,24 +84,6 @@ function openModalReview({ modalName, appId }) {
       })
       .catch((error) => console.log('Error:', error));
   }
-}
-
-function closeModalForData(closeBtn) {
-  const modalName = closeBtn.getAttribute('data-closemodalname');
-  document.querySelector(`[data-${modalName}]`).classList.add('close');
-  const modalReview = document.querySelector(
-    `[data-${modalName}] .modal__review`
-  );
-  const modalSuccess = document.querySelector(
-    `[data-${modalName}] .modal__review--success`
-  );
-  const modalError = document.querySelector(
-    `[data-${modalName}] .modal__review--error`
-  );
-
-  modalReview.classList.remove('dnone');
-  modalSuccess.classList.add('dnone');
-  modalError.classList.add('dnone');
 }
 
 function getElementsForDataAttribute(modalName) {
@@ -129,8 +119,6 @@ function openModalInstall({ data, modalName }) {
 
   installForm.addEventListener('reset', defaultStateInstallModal);
   modalCloseBtn.addEventListener('click', defaultStateInstallModal);
-
-  console.log();
 
   installForm.addEventListener('submit', installFormSubmit);
 
