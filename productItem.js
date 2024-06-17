@@ -17,17 +17,16 @@ toggleFavourite.addEventListener('click', (e) => {
     }),
   })
     .then((response) => response.json())
-    .then((data) => console.log(data))
     .catch((error) => console.error('Error:', error));
 });
 
-document.addEventListener('DOMContentLoaded', () => {
+function loadProduct() {
   const api = 'https://gexarus.com';
 
   const url = new URL(window.location.href);
   const id = url.searchParams.get('id');
 
-  fetch(`${api}/api/AppStore/item`, {
+  return fetch(`${api}/api/AppStore/item`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -38,10 +37,16 @@ document.addEventListener('DOMContentLoaded', () => {
   })
     .then((response) => response.json())
     .then((data) => {
-      productData = data.data;
-      setProduct(data.data);
+      return data.data;
     })
     .catch((error) => console.error('Error:', error));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadProduct().then((product) => {
+    setProduct(product);
+    document.dispatchEvent(new Event('productLoadedEvent'));
+  });
 
   function setProduct(product) {
     const productTitle = document.querySelector('.product__page__title');

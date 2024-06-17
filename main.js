@@ -168,10 +168,6 @@ function createProduct(product, wrap) {
     'href',
     `/productPage.html?id=${product.id}#review-anchor`
   );
-  productContentFooterBtnComment.onclick = function (e) {
-    e.preventDefault();
-    goToAnchor(e, `/productPage.html?id=${product.id}`, 'review-anchor');
-  };
 
   const productContentFooterBtnCommentTooltip = document.createElement('span');
   productContentFooterBtnCommentTooltip.classList.add('tooltip__content');

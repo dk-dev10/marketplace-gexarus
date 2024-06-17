@@ -1,19 +1,22 @@
-const anchors = document.querySelectorAll('[data-anchor]');
-
-anchors.forEach((anchor) => {
-  anchor.onclick = function (e) {
-    console.log(e);
-    goToAnchor(e, '', 'review-anchor');
-  };
+document.addEventListener('productLoadedEvent', () => {
+  if (window.location.hash) {
+    const block = document.querySelector(window.location.hash);
+    block.scrollIntoView({
+      block: 'start',
+    });
+  }
 });
 
-function goToAnchor(event, url, anchor) {
-  event.preventDefault();
-  window.location.href = url;
-  window.onload = function () {
-    window.location.hash = anchor;
-    document.querySelector(anchor).scrollIntoView({
-      behavior: 'smooth',
-    });
-  };
-}
+document.addEventListener('DOMContentLoaded', () => {
+  const anchors = document.querySelectorAll('[data-anchor]');
+
+  anchors.forEach((anchor) => {
+    anchor.onclick = function (e) {
+      e.preventDefault();
+      document.querySelector(this.hash).scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+      });
+    };
+  });
+});
