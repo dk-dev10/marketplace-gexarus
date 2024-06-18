@@ -1,9 +1,6 @@
 document.addEventListener('productLoadedEvent', () => {
   if (window.location.hash) {
-    const block = document.querySelector(window.location.hash);
-    block.scrollIntoView({
-      block: 'start',
-    });
+    anchorScrollTo(window.location.hash);
   }
 });
 
@@ -13,10 +10,14 @@ document.addEventListener('DOMContentLoaded', () => {
   anchors.forEach((anchor) => {
     anchor.onclick = function (e) {
       e.preventDefault();
-      document.querySelector(this.hash).scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-      });
+      anchorScrollTo(this.hash);
     };
   });
 });
+
+function anchorScrollTo(hash) {
+  document.querySelector(hash).scrollIntoView({
+    behavior: 'smooth',
+    block: 'start',
+  });
+}

@@ -1,0 +1,10 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.cp__socials {
+  background-image: url(https://firecode.ru/storage/img/189/ii-v-razrabotke-programmnogo-obespecheniya-detail.jpg);
+  padding: 12px;
+}
